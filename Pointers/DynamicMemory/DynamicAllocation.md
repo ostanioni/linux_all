@@ -5,11 +5,11 @@
 в заголовочном файле `<stdlib.h>` 
 в большинстве систем можно найти следующие функции:
 ```c
-1. malloc  void* malloc( size_t sizemem );
+1. malloc void* malloc( size_t sizemem );
 
 2. realloc void* realloc( void * ptrmem, size_t size );
 
-3. calloc  void * calloc( size_t number, size_t size );
+3. calloc  void* calloc( size_t number, size_t size );
 
 4. free  void free( void * ptr_to_mem_block );
 ```
