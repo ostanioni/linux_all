@@ -10,6 +10,8 @@
 	"stdio.h": "c",
 	"stdlib.h": "c",
 	"stdint.h": "c",
-	"unistd.h": "c"
+	"unistd.h": "c",
+	"cstdarg": "c",
+	"cstdio": "c"
 }
 }
