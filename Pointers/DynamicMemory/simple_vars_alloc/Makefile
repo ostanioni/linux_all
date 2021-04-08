@@ -1,6 +1,10 @@
+CC = gcc
+CCFLAGS= -Wall -g3 -O0
+
+
 int_alloc.out: int_alloc.c
-	gcc int_alloc.c -g3 -O0  -o int_alloc.out
+	$(CC) $(CCFLAGS) $^ -o $@
 string_alloc.out: string_alloc.c
-	gcc string_alloc.c -g3 -O0  -o string_alloc.out
+	$(CC) $(CCFLAGS) $^ -o $@
 clean:
 	rm *.out
