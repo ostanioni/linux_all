@@ -1,0 +1,36 @@
+<h1> Функции динамического управления памятью </h1>
+<h3>Для управления динамической памятью доступно 
+	несколько функций распределения памяти. 
+	Хотя то, что доступно, может зависеть от системы, 
+	в заголовочном файле stdlib.h 
+	в большинстве систем можно найти следующие функции:
+</h3>
+<ul>
+	<li>malloc</li>
+	<li>realloc</li>
+	<li>calloc</li>
+	<li>free</li>
+</ul>
+
+
+The functions are summarized in Table 2-1.
+Table 2-1. Dynamic memory allocation functions
+Function Description
+
+malloc Allocates memory from the heap |
+
+realloc Reallocates memory to a larger or smaller
+
+ amount based on a previously allocated block of memory
+calloc Allocates and zeros out memory from the heap
+free Returns a block of memory to the heap
+Dynamic memory is allocated from the heap. With successive memory allocation calls,
+there is no guarantee regarding the order of the memory or the continuity of memory
+allocated. However, the memory allocated will be aligned according to the pointer’s data
+type. For example, a four-byte integer would be allocated on an address boundary evenly
+divisible by four. The address returned by the heap manager will contain the lowest
+byte’s address.
+In Figure 2-3, the malloc function allocates four bytes at address 500. The second use
+of the malloc function allocates memory at address 600. They both are on four-byte
+address boundaries, and they did not allocate memory from consecutive memory
+locations.
