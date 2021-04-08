@@ -1,0 +1,15 @@
+{
+  "editor.fontSize": 21,
+  "terminal.integrated.fontSize": 15,
+  "editor.tabSize": 4,
+  "editor.insertSpaces": false,
+  "editor.detectIndentation": false,
+  "workbench.colorTheme": "Tomorrow Night Blue",
+"files.eol": "\n",
+"files.associations": {
+	"stdio.h": "c",
+	"stdlib.h": "c",
+	"stdint.h": "c",
+	"unistd.h": "c"
+}
+}
