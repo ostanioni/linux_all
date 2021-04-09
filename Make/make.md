@@ -1306,12 +1306,13 @@ Using the jobserver on Windows systems.
 Next: [Introduction](#Introduction), Previous: [Top](#Top), Up: [Top](#Top)   [[Contents](#Short-Table-of-Contents)][[Index](#Index-of-Concepts)]
 
 ## 1 Overview of `make`
+> Обзор утилиты `make`
 
-The `make` utility automatically determines which pieces of a large program need to be recompiled, and issues commands to recompile them. This manual describes GNU `make`, which was implemented by Richard Stallman and Roland McGrath. Development since Version 3.76 has been handled by Paul D. Smith.
+Утилита `make` автоматически определяет, какие части большой программы необходимо перекомпилировать, и выдает команды для их перекомпиляции. Это руководство описывает GNU `make`, реализованную Richard Stallman and Roland McGrath. Разработкой, начиная с версии 3.76, занимался Paul D. Smith. 
 
-GNU `make` conforms to section 6.2 of IEEE Standard 1003.2-1992 (POSIX.2).
+GNU `make` соответствует разделу 6.2 of IEEE Standard 1003.2-1992 (POSIX.2).
 
-Our examples show C programs, since they are most common, but you can use `make` with any programming language whose compiler can be run with a shell command. Indeed, `make` is not limited to programs. You can use it to describe any task where some files must be updated automatically from others whenever the others change.
+В наших примерах показаны программы на `C`, поскольку они наиболее распространены, но вы можете использовать `make` с любым языком программирования, компилятор которого может быть запущен с помощью команды оболочки. Действительно, программа make не ограничивается программами. Вы можете использовать его для описания любой задачи, в которой одни файлы должны автоматически обновляться из других файлов при изменении последних. 
 
 ||
 |• [Preparing](#Preparing)|  |Preparing and running `make`.|
@@ -1326,17 +1327,17 @@ Next: [Reading](#Reading), Previous: [Overview](#Overview), Up: [Overview](#Over
 
 ### Preparing and Running Make
 
-To prepare to use `make`, you must write a file called the *makefile* that describes the relationships among files in your program and provides commands for updating each file. In a program, typically, the executable file is updated from object files, which are in turn made by compiling source files.
+Чтобы подготовиться к использованию `make`, вы должны написать файл с именем * makefile *, который описывает отношения между файлами в вашей программе и предоставляет команды для обновления каждого файла. В программе обычно исполняемый файл обновляется из объектных файлов, которые, в свою очередь, создаются путем компиляции исходных файлов.
 
-Once a suitable makefile exists, each time you change some source files, this simple shell command:
+Когда подходящий make-файл существует, каждый раз, когда вы меняете некоторые исходные файлы, эта простая команда оболочки: 
 
 ``` {.example}
 make
 ```
 
-suffices to perform all necessary recompilations. The `make` program uses the makefile data base and the last-modification times of the files to decide which of the files need to be updated. For each of those files, it issues the recipes recorded in the data base.
+достаточно для выполнения всех необходимых перекомпиляций. Программа `make` использует базу данных make-файла и время последней модификации файлов, чтобы решить, какой из файлов необходимо обновить. Для каждого из этих файлов он выдает рецепты, записанные в базе данных.
 
-You can provide command line arguments to `make` to control which files should be recompiled, or how. See [How to Run `make`](#Running).
+Вы можете предоставить аргументы командной строки для make, чтобы контролировать, какие файлы должны быть перекомпилированы и как. Смотрите [Как запустить `make`](#Running).
 
 * * * * *
 
@@ -1344,9 +1345,11 @@ Next: [Bugs](#Bugs), Previous: [Preparing](#Preparing), Up: [Overview](#Overview
 
 ### 1.1 How to Read This Manual
 
-If you are new to `make`, or are looking for a general introduction, read the first few sections of each chapter, skipping the later sections. In each chapter, the first few sections contain introductory or general information and the later sections contain specialized or technical information. The exception is the second chapter, [An Introduction to Makefiles](#Introduction), all of which is introductory.
+> Как изучать данное руководство
 
-If you are familiar with other `make` programs, see [Features of GNU `make`](#Features), which lists the enhancements GNU `make` has, and [Incompatibilities and Missing Features](#Missing), which explains the few things GNU `make` lacks that others have.
+Если вы новичок в `make` или ищете общее введение, прочтите несколько первых разделов каждой главы, пропуская последующие разделы. В каждой главе первые несколько разделов содержат вводную или общую информацию, а последующие разделы содержат специализированную или техническую информацию. Исключением является вторая глава [Введение в Makefiles](#Introduction), которая является вводной.
+
+Если вы знакомы с другими программами `make`, см. [Возможности GNU` make`](#Features), где перечислены улучшения GNU `make`, и [Несовместимость и отсутствующие функции](#Missing), в котором объясняется несколько вещей, которых GNU `make` не хватает, что есть у других. 
 
 For a quick summary, see [Options Summary](#Options-Summary), [Quick Reference](#Quick-Reference), and [Special Targets](#Special-Targets).
 
@@ -1356,13 +1359,13 @@ Previous: [Reading](#Reading), Up: [Overview](#Overview)   [[Contents](#Short-T
 
 ### 1.2 Problems and Bugs
 
-If you have problems with GNU `make` or think you’ve found a bug, please report it to the developers; we cannot promise to do anything but we might well want to fix it.
+Если у вас есть проблемы с GNU `make` или вы думаете, что нашли ошибку, сообщите об этом разработчикам; мы не можем обещать что-либо сделать, но мы вполне можем захотеть это исправить.
 
-Before reporting a bug, make sure you’ve actually found a real bug. Carefully reread the documentation and see if it really says you can do what you’re trying to do. If it’s not clear whether you should be able to do something or not, report that too; it’s a bug in the documentation!
+Прежде чем сообщать об ошибке, убедитесь, что вы действительно нашли настоящую ошибку. Внимательно перечитайте документацию и посмотрите, действительно ли в ней говорится, что вы можете делать то, что пытаетесь сделать. Если неясно, сможете ли вы что-то сделать или нет, сообщите и об этом; это ошибка в документации!
 
-Before reporting a bug or trying to fix it yourself, try to isolate it to the smallest possible makefile that reproduces the problem. Then send us the makefile and the exact results `make` gave you, including any error or warning messages. Please don’t paraphrase these messages: it’s best to cut and paste them into your report. When generating this small makefile, be sure to not use any non-free or unusual tools in your recipes: you can almost always emulate what such a tool would do with simple shell commands. Finally, be sure to explain what you expected to occur; this will help us decide whether the problem was really in the documentation.
+Прежде чем сообщать об ошибке или пытаться исправить ее самостоятельно, постарайтесь изолировать ее до минимально возможного файла makefile, который воспроизводит проблему. Затем отправьте нам файл makefile и точные результаты, полученные от make, включая сообщения об ошибках и предупреждения. Не перефразируйте эти сообщения: лучше вырезать и вставить их в свой отчет. При создании этого небольшого make-файла не используйте в своих рецептах какие-либо несвободные или необычные инструменты: вы почти всегда можете эмулировать действия такого инструмента с помощью простых команд оболочки. Наконец, не забудьте объяснить, чего вы ожидали; это поможет нам решить, действительно ли проблема заключалась в документации. 
 
-Once you have a precise problem you can report it in one of two ways. Either send electronic mail to:
+Если у вас возникла конкретная проблема, вы можете сообщить о ней одним из двух способов. Либо отправьте электронное письмо по адресу: 
 
 ``` {.example}
     bug-make@gnu.org
@@ -1374,7 +1377,7 @@ or use our Web-based project management tool, at:
     http://savannah.gnu.org/projects/make/
 ```
 
-In addition to the information above, please be careful to include the version number of `make` you are using. You can get this information with the command ‘make --version’. Be sure also to include the type of machine and operating system you are using. One way to obtain this information is by looking at the final lines of output from the command ‘make --help’.
+В дополнение к информации выше, пожалуйста, будьте осторожны, чтобы указать номер версии `make`, которую вы используете. Вы можете получить эту информацию с помощью команды `make --version`. Не забудьте также указать тип используемой машины и операционную систему. Один из способов получить эту информацию - посмотреть на последние строки вывода команды `make --help`. 
 
 * * * * *
 
@@ -1382,12 +1385,11 @@ Next: [Makefiles](#Makefiles), Previous: [Overview](#Overview), Up: [Top](#Top) 
 
 2 An Introduction to Makefiles
 ------------------------------
+Вам нужен файл makefile, чтобы сообщить программе make, что делать. Чаще всего make-файл сообщает программе make, как компилировать и линковать программу.
 
-You need a file called a *makefile* to tell `make` what to do. Most often, the makefile tells `make` how to compile and link a program.
+В этой главе мы обсудим простой make-файл, который описывает, как скомпилировать и слинковать "Текстовый редактор", состоящий из восьми исходных файлов `C` и трех файлов заголовков. Файл **makefile* также может указывать программе `make`, как запускать различные команды при явном запросе (например, для удаления определенных файлов в качестве операции очистки). Чтобы увидеть более сложный пример make-файла, см. [Complex Makefile](#Complex-Makefile).
 
-In this chapter, we will discuss a simple makefile that describes how to compile and link a text editor which consists of eight C source files and three header files. The makefile can also tell `make` how to run miscellaneous commands when explicitly asked (for example, to remove certain files as a clean-up operation). To see a more complex example of a makefile, see [Complex Makefile](#Complex-Makefile).
-
-When `make` recompiles the editor, each changed C source file must be recompiled. If a header file has changed, each C source file that includes the header file must be recompiled to be safe. Each compilation produces an object file corresponding to the source file. Finally, if any source file has been recompiled, all the object files, whether newly made or saved from previous compilations, must be linked together to produce the new executable editor.
+Когда make перекомпилирует программу "Текстовый редактор", каждый измененный исходный файл `C` должен быть перекомпилирован. Если файл заголовка был изменен, каждый исходный файл `C`, который включает файл заголовка, должен быть перекомпилирован для обеспечения безопасности. Каждая компиляция создает объектный файл, соответствующий исходному файлу. Наконец, если какой-либо исходный файл был перекомпилирован, все объектные файлы, независимо от того, были ли они созданы заново или сохранены из предыдущих компиляций, должны быть связаны вместе для создания нового исполняемого файла программы "Текстовый редактор". 
 
 ||
 |• [Rule Introduction](#Rule-Introduction)|  |What a rule looks like.|
@@ -1404,6 +1406,8 @@ Next: [Simple Makefile](#Simple-Makefile), Previous: [Introduction](#Introductio
 
 ### 2.1 What a Rule Looks Like
 
+>Как писать правила
+
 A simple makefile consists of “rules” with the following shape:
 
 ``` {.example}
@@ -1412,18 +1416,16 @@ target … : prerequisites …
         …
         …
 ```
+*target* - это обычно имя файла, созданного программой; примерами целей являются исполняемые или объектные файлы. Целью также может быть название выполняемого действия, например `clean` (см. [Фальшивые цели](#Phony-Targets)).
 
-A *target* is usually the name of a file that is generated by a program; examples of targets are executable or object files. A target can also be the name of an action to carry out, such as ‘clean’ (see [Phony Targets](#Phony-Targets)).
+*prerequisite* (предварительное условие) - это файл, который используется в качестве входных данных для создания цели. Цель часто зависит от нескольких файлов.
 
-A *prerequisite* is a file that is used as input to create the target. A target often depends on several files.
+*Recipe* - это действие, которое выполняет make. В рецепте может быть более одной команды, либо в одной строке, либо каждая в отдельной строке. **Обратите внимание:** вам нужно поставить символ табуляции в начале каждой строки рецепта! Это опасность, улавливающая неосторожных. Если вы предпочитаете добавлять к рецептам префикс, отличный от табуляции, вы можете установить для переменной `.RECIPEPREFIX` альтернативный символ (см. [Специальные переменные](#Special-Variables)).
 
-A *recipe* is an action that `make` carries out. A recipe may have more than one command, either on the same line or each on its own line. **Please note:** you need to put a tab character at the beginning of every recipe line! This is an obscurity that catches the unwary. If you prefer to prefix your recipes with a character other than tab, you can set the `.RECIPEPREFIX` variable to an alternate character (see [Special Variables](#Special-Variables)).
+Обычно рецепт находится в правиле с *prerequisites* и служит для создания целевого файла, если какое-либо из предварительных условий изменяется. Однако правило, определяющее рецепт для цели, не обязательно должно иметь *prerequisites*. Например, правило, содержащее команду удаления, связанную с целью `clean`, не имеет *prerequisites*.
 
-Usually a recipe is in a rule with prerequisites and serves to create a target file if any of the prerequisites change. However, the rule that specifies a recipe for the target need not have prerequisites. For example, the rule containing the delete command associated with the target ‘clean’ does not have prerequisites.
-
-A *rule*, then, explains how and when to remake certain files which are the targets of the particular rule. `make` carries out the recipe on the prerequisites to create or update the target. A rule can also explain how and when to carry out an action. See [Writing Rules](#Rules).
-
-A makefile may contain other text besides rules, but a simple makefile need only contain rules. Rules may look somewhat more complicated than shown in this template, but all fit the pattern more or less.
+Таким образом, *rule* объясняет, как и когда переделывать определенные файлы, которые являются целями конкретного правила. `make` выполняет рецепт по предварительным условиям для создания или обновления цели. Правило также может объяснить, как и когда выполнять действие. См. [Написание правил](#Rules).
+`Makefile` может содержать другой текст, кроме правил, но простой make-файл должен содержать только правила. Правила могут выглядеть несколько сложнее, чем показано в этом шаблоне, но все они более или менее соответствуют шаблону. 
 
 * * * * *
 
@@ -1431,9 +1433,11 @@ Next: [How Make Works](#How-Make-Works), Previous: [Rule Introduction](#Rule-Int
 
 ### 2.2 A Simple Makefile
 
-Here is a straightforward makefile that describes the way an executable file called `edit` depends on eight object files which, in turn, depend on eight C source and three header files.
+> Простой Makefile
 
-In this example, all the C files include defs.h, but only those defining editing commands include command.h, and only low level files that change the editor buffer include buffer.h.
+Вот простой make-файл, который описывает, как исполняемый файл с именем `"edit"` зависит от восьми объектных файлов, которые, в свою очередь, зависят от восьми исходных файлов `C` и трех файлов заголовков.
+
+В этом примере все файлы `C` включают `defs.h`, но только те, которые определяют команды редактирования, включают `command.h`, и только файлы низкого уровня, которые изменяют буфер редактора, включают `buffer.h`. 
 
 ``` {.example}
 edit : main.o kbd.o command.o display.o \
@@ -1462,23 +1466,21 @@ clean :
            insert.o search.o files.o utils.o
 ```
 
-We split each long line into two lines using backslash/newline; this is like using one long line, but is easier to read. See [Splitting Long Lines](#Splitting-Lines).
+Мы разделяем каждую длинную строку на две строки, используя обратную косую черту / ; это похоже на использование одной длинной строки, но ее легче читать.  Смотрите [Разделение длинных строк](#Splitting-Lines).
 
-To use this makefile to create the executable file called edit, type:
-
+Чтобы использовать этот `Makefile` для создания исполняемого файла с именем `"edit"`, введите команду:
 ``` {.example}
 make
 ```
 
-To use this makefile to delete the executable file and all the object files from the directory, type:
-
+Чтобы использовать этот make-файл для удаления исполняемого файла и всех объектных файлов из каталога, введите:
 ``` {.example}
 make clean
 ```
 
-In the example makefile, the targets include the executable file ‘edit’, and the object files ‘main.o’ and ‘kbd.o’. The prerequisites are files such as ‘main.c’ and ‘defs.h’. In fact, each ‘.o’ file is both a target and a prerequisite. Recipes include ‘cc -c main.c’ and ‘cc -c kbd.c’.
+В примере make-файла цели включают исполняемый файл `"edit"` и объектные файлы `main.o` и `kbd.o`. Необходимыми условиями являются такие файлы, как `main.c` и `defs.h`. Фактически, каждый файл «.o» является одновременно *target* и *prerequisites*. Рецепты включают `cc -c main.c` и `cc -c kbd.c`.
 
-When a target is a file, it needs to be recompiled or relinked if any of its prerequisites change. In addition, any prerequisites that are themselves automatically generated should be updated first. In this example, edit depends on each of the eight object files; the object file main.o depends on the source file main.c and on the header file defs.h.
+Когда целью (*target*) является файл, его необходимо перекомпилировать или повторно связать, если какие-либо из его предварительных требований изменились. Кроме того, в первую очередь необходимо обновить любые автоматически создаваемые предварительные условия. В этом примере редактирование зависит от каждого из восьми объектных файлов; объектный файл `main.o` зависит от исходного файла `main.c` и заголовочного файла `defs.h`. 
 
 A recipe may follow each line that contains a target and prerequisites. These recipes say how to update the target file. A tab character (or whatever character is specified by the `.RECIPEPREFIX` variable; see [Special Variables](#Special-Variables)) must come at the beginning of every line in the recipe to distinguish recipes from other lines in the makefile. (Bear in mind that `make` does not know anything about how the recipes work. It is up to you to supply recipes that will update the target file properly. All `make` does is execute the recipe you have specified when the target file needs to be updated.)
 
