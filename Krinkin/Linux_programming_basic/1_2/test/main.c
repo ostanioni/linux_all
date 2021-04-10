@@ -11,6 +11,6 @@ int main(int argc, char * argv[])
 	int result = someSecretFunctionPrototype(argv[2]);
 	printf("\n%d", result);
 	
-	dlclose(hdl);
+	dlclose(hdl);	
 	return 0;
 }
