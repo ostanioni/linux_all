@@ -1,9 +1,11 @@
+# gcc -o ... -Wl,-rpath .
+flags=-Wall -g3 -O0
 all: lib elf
 
-elf: main.c
-	cc main.c -ldl -fPIC -g -O0 -o main.out
+elf: solution.c
+	cc $^ -ldl $(flags) -o solution
 lib: libShared.c
-	cc libShared.c -shared -fPIC -Wall -g -O0 -o libShared.so 
+	cc $^ -shared -fPIC $(flags)  -o libShared.so 
 
 clean:
-	rm *.out *.so
+	rm *.out *.so solution
