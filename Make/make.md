@@ -1482,9 +1482,9 @@ make clean
 
 Когда целью (*target*) является файл, его необходимо перекомпилировать или повторно связать, если какие-либо из его предварительных требований изменились. Кроме того, в первую очередь необходимо обновить любые автоматически создаваемые предварительные условия. В этом примере редактирование зависит от каждого из восьми объектных файлов; объектный файл `main.o` зависит от исходного файла `main.c` и заголовочного файла `defs.h`. 
 
-A recipe may follow each line that contains a target and prerequisites. These recipes say how to update the target file. A tab character (or whatever character is specified by the `.RECIPEPREFIX` variable; see [Special Variables](#Special-Variables)) must come at the beginning of every line in the recipe to distinguish recipes from other lines in the makefile. (Bear in mind that `make` does not know anything about how the recipes work. It is up to you to supply recipes that will update the target file properly. All `make` does is execute the recipe you have specified when the target file needs to be updated.)
+Рецепт(recipe) может следовать за каждой строкой, содержащей цель и предпосылки(prerequisites). Эти рецепты говорят, как обновить целевой файл. Символ табуляции (или любой другой символ, указанный в переменной `.RECIPEPREFIX`; см. [Special Variables] (# Special-Variables)) должен стоять в начале каждой строки в рецепте, чтобы отличать рецепты от других строк в make-файле. (Имейте в виду, что `make` ничего не знает о том, как работают рецепты. Вы должны предоставить рецепты, которые будут правильно обновлять целевой файл. Все, что делает `make`, это выполняет рецепт, который вы указали, когда целевой файл необходимо обновить.)
 
-The target ‘clean’ is not a file, but merely the name of an action. Since you normally do not want to carry out the actions in this rule, ‘clean’ is not a prerequisite of any other rule. Consequently, `make` never does anything with it unless you tell it specifically. Note that this rule not only is not a prerequisite, it also does not have any prerequisites, so the only purpose of the rule is to run the specified recipe. Targets that do not refer to files but are just actions are called *phony targets*. See [Phony Targets](#Phony-Targets), for information about this kind of target. See [Errors in Recipes](#Errors), to see how to cause `make` to ignore errors from `rm` or any other command.
+Цель `clean` - это не файл, а просто название действия. Поскольку обычно вы не хотите выполнять действия, описанные в этом правиле, `clean` не является обязательным условием любого другого правила. Следовательно, `make` никогда ничего не сделает с ним, если вы не укажете это специально. Обратите внимание, что это правило не только не является предварительным условием, оно также не имеет каких-либо предварительных условий, поэтому единственная цель правила - запустить указанный рецепт. Цели, которые не относятся к файлам, а являются просто действиями, называются *phony targets* (фальшивыми целями). См. [Фальшивые цели](#Фальшивые цели) для получения информации об этом виде цели. См. [Ошибки в рецептах](#Ошибки), чтобы узнать, как заставить `make` игнорировать ошибки из `rm` или любой другой команды. 
 
 * * * * *
 
@@ -1496,21 +1496,27 @@ By default, `make` starts with the first target (not targets whose names start w
 
 In the simple example of the previous section, the default goal is to update the executable program edit; therefore, we put that rule first.
 
-Thus, when you give the command:
+По умолчанию make начинается с первой цели (а не с тех, чьи имена начинаются с "."). Это называется *default goal* (целью по умолчанию). (*Goals* - это цели, которые `make` стремится обновить в конечном итоге. Вы можете изменить это поведение с помощью командной строки (см. [Аргументы для определения целей](#Goals)) или специальной переменной` .DEFAULT_GOAL` (см. [Другие специальные переменные](#специальных-переменных)).
+
+В простом примере из предыдущего раздела цель по умолчанию - обновить редактирование исполняемой программы; поэтому мы ставим это правило на первое место.
+
+Таким образом, когда вы даете команду: 
 
 ``` {.example}
 make
 ```
+`make` читает make-файл в текущем каталоге и начинает с обработки первого правила. В примере это правило для повторного связывания edit; но прежде чем make сможет полностью обработать это правило, она должна обработать правила для файлов, от которых зависит редактирование, которыми в данном случае являются объектные файлы. Каждый из этих файлов обрабатывается по своему правилу. Эти правила требуют обновления каждого файла `.o` путем компиляции его исходного файла. Перекомпиляция должна быть выполнена, если исходный файл или любой из файлов заголовков, указанных в качестве предварительных требований, более новый, чем объектный файл, или если объектный файл не существует.
 
-`make` reads the makefile in the current directory and begins by processing the first rule. In the example, this rule is for relinking edit; but before `make` can fully process this rule, it must process the rules for the files that edit depends on, which in this case are the object files. Each of these files is processed according to its own rule. These rules say to update each ‘.o’ file by compiling its source file. The recompilation must be done if the source file, or any of the header files named as prerequisites, is more recent than the object file, or if the object file does not exist.
+Остальные правила обрабатываются, потому что их цели появляются как предварительные условия цели. Если какое-либо другое правило не зависит от цели (или чего-то еще, от чего оно зависит и т. Д.), Это правило не обрабатывается, если вы не укажете `make` сделать это (с помощью такой команды, как` make clean`). 
 
-The other rules are processed because their targets appear as prerequisites of the goal. If some other rule is not depended on by the goal (or anything it depends on, etc.), that rule is not processed, unless you tell `make` to do so (with a command such as `make clean`).
+Перед перекомпиляцией объектного файла `make` рассматривает возможность обновления своих предварительных требований, исходного файла и файлов заголовков. Этот make-файл не указывает, что для них нужно делать - файлы `.c` и `.h` не являются целями каких-либо правил, поэтому `make` ничего не делает для этих файлов. Но `make` будет обновлять автоматически сгенерированные программы `C`, такие как созданные `Bison` или `Yacc`, в настоящее время по их собственным правилам.
 
-Before recompiling an object file, `make` considers updating its prerequisites, the source file and header files. This makefile does not specify anything to be done for them—the ‘.c’ and ‘.h’ files are not the targets of any rules—so `make` does nothing for these files. But `make` would update automatically generated C programs, such as those made by Bison or Yacc, by their own rules at this time.
+После перекомпиляции любых объектных файлов, которые нуждаются в этом, `make` решает, связывать ли редактирование заново. Это необходимо сделать, если файл `edit` не существует или если какой-либо из объектных файлов новее, чем он. Если объектный файл был только что перекомпилирован, теперь он новее, чем редактируемый, поэтому редактирование повторно связывается.
 
-After recompiling whichever object files need it, `make` decides whether to relink edit. This must be done if the file edit does not exist, or if any of the object files are newer than it. If an object file was just recompiled, it is now newer than edit, so edit is relinked.
+Таким образом, если мы изменим файл `insert.c` и запустим `make`, `make` скомпилирует этот файл для обновления `insert.o`, а затем создаст ссылку на редактирование. Если мы изменим файл `command.h` и запустим `make`,` make` перекомпилирует объектные файлы `kbd.o`, `command.o` и `files.o`, а затем свяжет редактирование файла.
 
-Thus, if we change the file insert.c and run `make`, `make` will compile that file to update insert.o, and then link edit. If we change the file command.h and run `make`, `make` will recompile the object files kbd.o, command.o and files.o and then link the file edit.
+Таким образом, если мы изменим файл `insert.c` и запустим `make`, `make` скомпилирует этот файл для обновления `insert.o`, а затем создаст ссылку на редактирование. Если мы изменим файл `command.h` и запустим `make`,` make` перекомпилирует объектные файлы `kbd.o`, `command.o` и `files.o`, а затем свяжет редактирование файла.
+
 
 * * * * *
 
