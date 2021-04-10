@@ -1,0 +1,9 @@
+- `file` - указываем файл
+- `set args` - устанавливаем аргументы
+- `show args` - показать аргументы
+- `break main` 
+- `next`
+- `run` - запускаем программу указанную
+- `info variables` to list "All global and static variable names".
+- `info locals` to list "Local variables of current stack frame" (names and values), including static variables in that function.
+- `info args` o list "Arguments of the current stack frame" (names and values).
