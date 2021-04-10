@@ -1,4 +1,5 @@
 # gcc -o ... -Wl,-rpath .
+# readelf -d solution
 flags=-Wall -g3 -O0
 all: lib elf
 
