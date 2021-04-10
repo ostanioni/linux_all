@@ -7,3 +7,5 @@
 - `info variables` to list "All global and static variable names".
 - `info locals` to list "Local variables of current stack frame" (names and values), including static variables in that function.
 - `info args` o list "Arguments of the current stack frame" (names and values).
+- `print *argv@argc` - печатает
+- `(gdb) print *array@size`  [https://stackoverflow.com/questions/29528732/gdb-print-all-values-in-char-array]
