@@ -1524,7 +1524,7 @@ Next: [make Deduces](#make-Deduces), Previous: [How Make Works](#How-Make-Works)
 
 ### 2.4 Variables Make Makefiles Simpler
 
-In our example, we had to list all the object files twice in the rule for edit (repeated here):
+В нашем примере нам пришлось дважды перечислить все объектные файлы в правиле редактирования (повторяется здесь): 
 
 ``` {.example}
 edit : main.o kbd.o command.o display.o \
@@ -1533,18 +1533,17 @@ edit : main.o kbd.o command.o display.o \
                    insert.o search.o files.o utils.o
 ```
 
-Such duplication is error-prone; if a new object file is added to the system, we might add it to one list and forget the other. We can eliminate the risk and simplify the makefile by using a variable. *Variables* allow a text string to be defined once and substituted in multiple places later (see [How to Use Variables](#Using-Variables)).
+Такое дублирование чревато ошибками; если в систему добавляется новый объектный файл, мы можем добавить его в один список и забыть о другом. Мы можем исключить риск и упростить make-файл, используя переменную. *Variables* (Переменные) позволяют определять текстовую строку один раз и заменять ее в нескольких местах позже (см. [Как использовать переменные](#Using-Variables)). 
 
-It is standard practice for every makefile to have a variable named `objects`, `OBJECTS`, `objs`, `OBJS`, `obj`, or `OBJ` which is a list of all object file names. We would define such a variable `objects` with a line like this in the makefile:
+Стандартной практикой для каждого make-файла является наличие переменных с именами `objects`, `OBJECTS`, `objs`, `OBJS`, `obj` или `OBJ`, которая представляет собой список всех имен объектных файлов. Мы бы определяли такую переменную `objects` с помощью такой строки в make-файле:
 
 ``` {.example}
 objects = main.o kbd.o command.o display.o \
           insert.o search.o files.o utils.o
 ```
+Затем в каждое место, куда мы хотим поместить список имен файлов объектов, мы можем заменить значение переменной, написав `\$(objects)` (см. [Как использовать переменные](#Using-Variables)).
 
-Then, each place we want to put a list of the object file names, we can substitute the variable’s value by writing ‘\$(objects)’ (see [How to Use Variables](#Using-Variables)).
-
-Here is how the complete simple makefile looks when you use a variable for the object files:
+Вот как выглядит полный простой make-файл, когда вы используете переменную для объектных файлов:
 
 ``` {.example}
 objects = main.o kbd.o command.o display.o \
@@ -1578,11 +1577,11 @@ Next: [Combine By Prerequisite](#Combine-By-Prerequisite), Previous: [Variables 
 
 ### 2.5 Letting `make` Deduce the Recipes
 
-It is not necessary to spell out the recipes for compiling the individual C source files, because `make` can figure them out: it has an *implicit rule* for updating a ‘.o’ file from a correspondingly named ‘.c’ file using a ‘cc -c’ command. For example, it will use the recipe ‘cc -c main.c -o main.o’ to compile main.c into main.o. We can therefore omit the recipes from the rules for the object files. See [Using Implicit Rules](#Implicit-Rules).
+Нет необходимости подробно описывать рецепты для компиляции отдельных исходных файлов `C`, потому что `make` может их понять: у него есть *implicit rule* (неявное правило) для обновления файла `.o` из файла `.c` с соответствующим именем используя команду `cc -c`. Например, он будет использовать рецепт `cc -c main.c -o main.o` для компиляции main.c в main.o. Поэтому мы можем опустить рецепты из правил для объектных файлов. См. [Использование неявных правил](#Implicit-Rules). 
 
-When a ‘.c’ file is used automatically in this way, it is also automatically added to the list of prerequisites. We can therefore omit the ‘.c’ files from the prerequisites, provided we omit the recipe.
+Когда файл `.c` автоматически используется таким образом, он также автоматически добавляется в список предварительных требований. Поэтому мы можем опустить файлы `.c` в предварительных требованиях, при условии, что мы опускаем рецепт.
 
-Here is the entire example, with both of these changes, and a variable `objects` as suggested above:
+Вот полный пример с обоими этими изменениями и переменной `objects`, как предложено выше: 
 
 ``` {.example}
 objects = main.o kbd.o command.o display.o \
@@ -1604,10 +1603,9 @@ utils.o : defs.h
 clean :
         rm edit $(objects)
 ```
+Вот как мы напишем make-файл на практике. (Сложности, связанные с `clean`, описаны в другом месте. См. [Фальшивые цели](#Фальшивые-цели) и [Ошибки в рецептах](#Ошибки).)
 
-This is how we would write the makefile in actual practice. (The complications associated with ‘clean’ are described elsewhere. See [Phony Targets](#Phony-Targets), and [Errors in Recipes](#Errors).)
-
-Because implicit rules are so convenient, they are important. You will see them used frequently.
+Поскольку неявные правила настолько удобны, они важны. Вы увидите, что они часто используются. 
 
 * * * * *
 
