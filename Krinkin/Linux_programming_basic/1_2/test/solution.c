@@ -5,12 +5,10 @@
 
 //argv = "libShared.so someSecretFunctionPrototype 8"
 int (*someSecretFunctionPrototype)(int);
-const char* concat(const char *s1, const char *s2);
 
 int main(int argc, char * argv[])
 {
-	const char *path = concat("./", argv[1]);
-	void *hdl = dlopen(path, RTLD_LAZY);
+	void *hdl = dlopen(argv[1], RTLD_LAZY);
 	someSecretFunctionPrototype = (int (*)(int))dlsym(hdl, argv[2]);
 	
 	int result = someSecretFunctionPrototype( atoi(argv[3]) );
@@ -18,13 +16,4 @@ int main(int argc, char * argv[])
 	
 	dlclose(hdl);
 	return 0;
-}
-
-const char* concat(const char *s1, const char *s2)
-{
-    char *result = malloc(strlen(s1) + strlen(s2) + 1); // +1 for the null-terminator
-    // in real code you would check for errors in malloc here
-    strcpy(result, s1);
-    strcat(result, s2);
-    return result;
 }

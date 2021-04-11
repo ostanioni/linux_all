@@ -1,12 +1,11 @@
-# gcc -o ... -Wl,-rpath .
 # readelf -d solution
-flags=-Wall -g3 -O0
+flags=-Wall -g3 -O0 -Wl,-rpath,.
 all: lib elf
 
 elf: solution.c
-	cc $^ -ldl $(flags) -o solution
+	cc solution.c -ldl $(flags) -o solution
 lib: libShared.c
-	cc $^ -shared -fPIC $(flags)  -o libShared.so 
+	cc libShared.c -shared -fPIC $(flags)  -o libShared.so 
 
 clean:
-	rm *.out *.so solution
+	rm libShared.so solution
