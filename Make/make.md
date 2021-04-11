@@ -1643,28 +1643,29 @@ Previous: [Combine By Prerequisite](#Combine-By-Prerequisite), Up: [Introduction
 
 ### 2.7 Rules for Cleaning the Directory
 
-Compiling a program is not the only thing you might want to write rules for. Makefiles commonly tell how to do a few other things besides compiling a program: for example, how to delete all the object files and executables so that the directory is ‘clean’.
+> Правила для чистки директории
 
-Here is how we could write a `make` rule for cleaning our example editor:
+Компиляция программы - не единственное, для чего вы можете захотеть написать правила. Файлы `Makefile` обычно сообщают, как сделать еще несколько вещей помимо компиляции программы: например, как удалить все объектные файлы и исполняемые файлы, чтобы каталог был `clean`.
+
+Вот как мы могли бы написать правило `make` для очистки нашего примера редактора: 
 
 ``` {.example}
 clean:
         rm edit $(objects)
 ```
 
-In practice, we might want to write the rule in a somewhat more complicated manner to handle unanticipated situations. We would do this:
+На практике мы могли бы захотеть написать правило несколько более сложным способом, чтобы справиться с непредвиденными ситуациями. Мы бы сделали это:
 
 ``` {.example}
 .PHONY : clean
 clean :
         -rm edit $(objects)
 ```
+Это предотвращает сбивание `make` с фактическим файлом с именем `clean` и заставляет его продолжать работу, несмотря на ошибки из `rm`. (См. [Фальшивые цели](#Фальшивые-цели) и [Ошибки в рецептах](#Ошибки).)
 
-This prevents `make` from getting confused by an actual file called clean and causes it to continue in spite of errors from `rm`. (See [Phony Targets](#Phony-Targets), and [Errors in Recipes](#Errors).)
+Такое правило не следует помещать в начало make-файла, потому что мы не хотим, чтобы оно запускалось по умолчанию! Таким образом, в примере make-файла мы хотим, чтобы правило для "edit", которое перекомпилирует редактор, оставалось целью по умолчанию.
 
-A rule such as this should not be placed at the beginning of the makefile, because we do not want it to run by default! Thus, in the example makefile, we want the rule for `edit`, which recompiles the editor, to remain the default goal.
-
-Since `clean` is not a prerequisite of `edit`, this rule will not run at all if we give the command ‘make’ with no arguments. In order to make the rule run, we have to type ‘make clean’. See [How to Run `make`](#Running).
+Так как `clean` не является предварительным условием "edit", это правило не будет выполняться вообще, если мы дадим команду `make` без аргументов. Чтобы правило заработало, мы должны набрать `clean`. См. [Как запустить `make`](#Запуск). 
 
 * * * * *
 
