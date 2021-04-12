@@ -1645,7 +1645,7 @@ Previous: [Combine By Prerequisite](#Combine-By-Prerequisite), Up: [Introduction
 
 ### 2.7 Rules for Cleaning the Directory
 
-> Правила для чистки директории
+> Правила для очистки директории
 
 Компиляция программы - не единственное, для чего вы можете захотеть написать правила. Файлы `Makefile` обычно сообщают, как сделать еще несколько вещей помимо компиляции программы: например, как удалить все объектные файлы и исполняемые файлы, чтобы каталог был `clean`.
 
@@ -1833,11 +1833,14 @@ Next: [Remaking Makefiles](#Remaking-Makefiles), Previous: [Include](#Include), 
 
 ### 3.4 The Variable `MAKEFILES`
 
-If the environment variable `MAKEFILES` is defined, `make` considers its value as a list of names (separated by whitespace) of additional makefiles to be read before the others. This works much like the `include` directive: various directories are searched for those files (see [Including Other Makefiles](#Include)). In addition, the default goal is never taken from one of these makefiles (or any makefile included by them) and it is not an error if the files listed in `MAKEFILES` are not found.
+> Переменная `MAKEFILES`
 
-The main use of `MAKEFILES` is in communication between recursive invocations of `make` (see [Recursive Use of `make`](#Recursion)). It usually is not desirable to set the environment variable before a top-level invocation of `make`, because it is usually better not to mess with a makefile from outside. However, if you are running `make` without a specific makefile, a makefile in `MAKEFILES` can do useful things to help the built-in implicit rules work better, such as defining search paths (see [Directory Search](#Directory-Search)).
+Если переменная окружения `MAKEFILES` определена, `make` рассматривает ее значение как список имен (разделенных пробелом) дополнительных make-файлов, которые должны быть прочитаны раньше других. Это работает так же, как директива `include`: эти файлы ищутся в различных каталогах (см. [Включение других файлов Makefile](#Include)). Кроме того, цель по умолчанию никогда не берется из одного из этих make-файлов (или любого make-файла, включенного в них), и это не является ошибкой, если файлы, перечисленные в `MAKEFILES`, не найдены.
 
-Some users are tempted to set `MAKEFILES` in the environment automatically on login, and program makefiles to expect this to be done. This is a very bad idea, because such makefiles will fail to work if run by anyone else. It is much better to write explicit `include` directives in the makefiles. See [Including Other Makefiles](#Include).
+Основное использование MAKEFILES - это связь между рекурсивными вызовами make (см. [Рекурсивное использование make] (# Рекурсия)). Обычно нежелательно устанавливать переменную окружения перед вызовом верхнего уровня make, потому что обычно лучше не связываться с make-файлом извне. Однако, если вы запускаете `make` без определенного make-файла, make-файл в` MAKEFILES` может делать полезные вещи, чтобы помочь встроенным неявным правилам работать лучше, например, определение путей поиска (см. [Directory Search](#Directory-Search)).
+
+
+У некоторых пользователей возникает соблазн автоматически установить `MAKEFILES` в среде при входе в систему, и программные файлы makefile ожидают, что это будет сделано. Это очень плохая идея, потому что такие make-файлы не будут работать, если их будет запускать кто-то другой. Намного лучше написать явные директивы `include` в make-файлах. См. [Включение других файлов Makefile](#Include). 
 
 * * * * *
 
