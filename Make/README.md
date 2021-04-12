@@ -1764,13 +1764,15 @@ Next: [Include](#Include), Previous: [Makefile Contents](#Makefile-Contents), Up
 
 ### 3.2 What Name to Give Your Makefile
 
-By default, when `make` looks for the makefile, it tries the following names, in order: GNUmakefile, makefile and Makefile.
+> Как назвать make-файл?
 
-Normally you should call your makefile either makefile or Makefile. (We recommend Makefile because it appears prominently near the beginning of a directory listing, right near other important files such as README.) The first name checked, GNUmakefile, is not recommended for most makefiles. You should use this name if you have a makefile that is specific to GNU `make`, and will not be understood by other versions of `make`. Other `make` programs look for makefile and Makefile, but not GNUmakefile.
+По умолчанию, когда `make` ищет make-файл, он пробует следующие имена по порядку: `GNUmakefile`, `makefile` и `Makefile`.
 
-If `make` finds none of these names, it does not use any makefile. Then you must specify a goal with a command argument, and `make` will attempt to figure out how to remake it using only its built-in implicit rules. See [Using Implicit Rules](#Implicit-Rules).
+Обычно вы должны вызывать свой make-файл либо `makefile`, либо `Makefile`. (Мы рекомендуем `Makefile`, потому что он находится на видном месте в начале списка каталогов, рядом с другими важными файлами, такими как `README`.) Первое отмеченное имя, `GNUmakefile`, не рекомендуется для большинства make-файлов. Вы должны использовать это имя, если у вас есть make-файл, специфичный для *GNU* `make`, и который не будет понят другими версиями `make`. Другие программы `make` ищут `makefile` и `Makefile`, но не `GNUmakefile`. 
 
-If you want to use a nonstandard name for your makefile, you can specify the makefile name with the ‘-f’ or ‘--file’ option. The arguments ‘-f name’ or ‘--file=name’ tell `make` to read the file name as the makefile. If you use more than one ‘-f’ or ‘--file’ option, you can specify several makefiles. All the makefiles are effectively concatenated in the order specified. The default makefile names GNUmakefile, makefile and Makefile are not checked automatically if you specify ‘-f’ or ‘--file’.
+Если `make` не находит ни одного из этих имен, он не использует никаких make-файлов. Затем вы должны указать цель с помощью аргумента команды, и `make` попытается выяснить, как переделать ее, используя только свои встроенные неявные правила. См. [Использование неявных правил](#Implicit-Rules). 
+
+Если вы хотите использовать нестандартное имя для вашего make-файла, вы можете указать имя make-файла с помощью параметра `-f` или `--file`. Аргументы `-f name` или `--file = name` предписывают программе `make` прочитать имя файла как make-файл. Если вы используете более одного параметра `-f` или `--file`, вы можете указать несколько файлов `makefile`. Все make-файлы эффективно объединяются в указанном порядке. Имена make-файлов по умолчанию: `GNUmakefile`, `makefile` и `Makefile` не проверяются автоматически, если вы укажете `-f` или `--file`. 
 
 * * * * *
 
@@ -1778,47 +1780,50 @@ Next: [MAKEFILES Variable](#MAKEFILES-Variable), Previous: [Makefile Names](#Mak
 
 ### 3.3 Including Other Makefiles
 
-The `include` directive tells `make` to suspend reading the current makefile and read one or more other makefiles before continuing. The directive is a line in the makefile that looks like this:
+> Включение других make-файлов
+
+Директива `include` указывает `make` приостановить чтение текущего make-файла и прочитать один или несколько других make-файлов перед продолжением. Директива - это строка в make-файле, которая выглядит следующим образом:
 
 ``` {.example}
 include filenames…
 ```
 
-filenames can contain shell file name patterns. If filenames is empty, nothing is included and no error is printed.
+имена файлов могут содержать шаблоны имен файлов оболочки. Если имена файлов пустые, ничего не включается и ошибки не печатаются.
 
-Extra spaces are allowed and ignored at the beginning of the line, but the first character must not be a tab (or the value of `.RECIPEPREFIX`)—if the line begins with a tab, it will be considered a recipe line. Whitespace is required between `include` and the file names, and between file names; extra whitespace is ignored there and at the end of the directive. A comment starting with ‘\#’ is allowed at the end of the line. If the file names contain any variable or function references, they are expanded. See [How to Use Variables](#Using-Variables).
+Допускаются и игнорируются лишние пробелы в начале строки, но первый символ не должен быть табуляцией (или значением `.RECIPEPREFIX`) - если строка начинается с табуляции, она будет считаться строкой рецепта. Пробелы необходимы между `include` и именами файлов, а также между именами файлов; лишние пробелы игнорируются там и в конце директивы. Комментарий, начинающийся с «\ #», допускается в конце строки. Если имена файлов содержат ссылки на переменные или функции, они раскрываются. См. [Как использовать переменные](#Using-Variables). 
 
-For example, if you have three .mk files, a.mk, b.mk, and c.mk, and `$(bar)` expands to `bish bash`, then the following expression
+Например, если у вас есть три файла `.mk`, `a.mk`, `b.mk` и `c.mk`, а `$ (bar)` заменяется на `bish bash`, тогда следующее выражение
 
 ``` {.example}
 include foo *.mk $(bar)
 ```
 
-is equivalent to
+тоже самое, что 
 
 ``` {.example}
 include foo a.mk b.mk c.mk bish bash
 ```
 
-When `make` processes an `include` directive, it suspends reading of the containing makefile and reads from each listed file in turn. When that is finished, `make` resumes reading the makefile in which the directive appears.
+Когда `make` обрабатывает директиву `include`, она приостанавливает чтение содержащего make-файла и по очереди читает из каждого указанного файла. Когда это будет завершено, `make` возобновит чтение make-файла, в котором указана директива. 
 
-One occasion for using `include` directives is when several programs, handled by individual makefiles in various directories, need to use a common set of variable definitions (see [Setting Variables](#Setting)) or pattern rules (see [Defining and Redefining Pattern Rules](#Pattern-Rules)).
+Один из случаев использования директив `include` - это когда несколько программ, обрабатываемых отдельными make-файлами в разных каталогах, должны использовать общий набор определений переменных (см. [Установка переменных](#Setting)) или шаблонных правил (см. [Определение и переопределение Правила паттернов](#Pattern-Rules)).
 
-Another such occasion is when you want to generate prerequisites from source files automatically; the prerequisites can be put in a file that is included by the main makefile. This practice is generally cleaner than that of somehow appending the prerequisites to the end of the main makefile as has been traditionally done with other versions of `make`. See [Automatic Prerequisites](#Automatic-Prerequisites).
+Другой такой случай - когда вы хотите автоматически сгенерировать предварительные условия из исходных файлов; предварительные условия могут быть помещены в файл, который включен в основной make-файл. Эта практика обычно чище, чем добавление предварительных условий в конец основного make-файла, как это традиционно делалось с другими версиями `make`. См. [Автоматические предварительные условия](#Automatic-Prerequisites). 
 
-If the specified name does not start with a slash, and the file is not found in the current directory, several other directories are searched. First, any directories you have specified with the ‘-I’ or ‘--include-dir’ option are searched (see [Summary of Options](#Options-Summary)). Then the following directories (if they exist) are searched, in this order: prefix/include (normally /usr/local/include [<sup>1</sup>](#FOOT1)) /usr/gnu/include, /usr/local/include, /usr/include.
+Если указанное имя не начинается с косой черты и файл не найден в текущем каталоге, выполняется поиск в нескольких других каталогах. Сначала ищутся все каталоги, указанные вами с помощью параметра `-I` или `--include-dir` (см. [Сводка параметров] (#Options-Summary)). Затем выполняется поиск в следующих каталогах (если они существуют) в следующем порядке: `prefix/include` (обычно `/usr/local/include` [<sup> 1 </sup>](#FOOT1)) `/usr/gnu/include`, `/usr/local/include`, `/usr/include`. 
 
-If an included makefile cannot be found in any of these directories, a warning message is generated, but it is not an immediately fatal error; processing of the makefile containing the `include` continues. Once it has finished reading makefiles, `make` will try to remake any that are out of date or don’t exist. See [How Makefiles Are Remade](#Remaking-Makefiles). Only after it has tried to find a way to remake a makefile and failed, will `make` diagnose the missing makefile as a fatal error.
+Если включенный make-файл не может быть найден ни в одном из этих каталогов, генерируется предупреждающее сообщение, но это не является немедленной фатальной ошибкой; обработка make-файла, содержащего `include`, продолжается. По завершении чтения make-файлов, make попытается переделать все файлы, которые устарели или не существуют. См. [Как переделываются файлы Makefiles](#Remaking-Makefiles). Только после того, как он попытается найти способ переделать make-файл и потерпит неудачу, make диагностирует отсутствующий make-файл как фатальную ошибку. 
 
-If you want `make` to simply ignore a makefile which does not exist or cannot be remade, with no error message, use the `-include` directive instead of `include`, like this:
+
+Если вы хотите, чтобы `make` просто игнорировал make-файл, который не существует или не может быть переделан, без сообщения об ошибке, используйте директиву `-include` вместо `include`, например: 
 
 ``` {.example}
 -include filenames…
 ```
 
-This acts like `include` in every way except that there is no error (not even a warning) if any of the filenames (or any prerequisites of any of the filenames) do not exist or cannot be remade.
+Это действует как `include` во всех отношениях, за исключением того, что нет ошибки (даже предупреждения), если какое-либо из имен файлов (или любые предварительные условия для любого из имен файлов) не существует или не может быть переделано.
 
-For compatibility with some other `make` implementations, `sinclude` is another name for `-include`.
+Для совместимости с некоторыми другими реализациями `make`, `sinclude` - другое название для `-include`. 
 
 * * * * *
 
