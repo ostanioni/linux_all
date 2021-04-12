@@ -1,11 +1,17 @@
+- `gdb -silent` - запуск отладчика
 - `file` - указываем файл
 - `set args` - устанавливаем аргументы
+- `set var=val` - Assign "val" value to the variable "var"
 - `show args` - показать аргументы
 - `break main` 
-- `next`
-- `run` - запускаем программу указанную
+- `run (r)` - запускаем программу указанную
+- `c` - Continues/Resumes running the program until the next breakpoint or end of program
+- `step (s)` -
+- `next (n)` - Like `s`, but it does not step into functions
+- `p x` - Prints the current value of the variable "x"
 - `info variables` to list "All global and static variable names".
 - `info locals` to list "Local variables of current stack frame" (names and values), including static variables in that function.
 - `info args` o list "Arguments of the current stack frame" (names and values).
 - `print *argv@argc` - печатает
 - `(gdb) print *array@size`  [https://stackoverflow.com/questions/29528732/gdb-print-all-values-in-char-array]
+- `bt` - Prints a stack trace
