@@ -1674,8 +1674,9 @@ Next: [Rules](#Rules), Previous: [Introduction](#Introduction), Up: [Top](#Top) 
 3 Writing Makefiles
 -------------------
 
-The information that tells `make` how to recompile a system comes from reading a data base called the *makefile*.
+> Написание make-файлов
 
+Информация, которая сообщает программе `make`, как перекомпилировать систему, поступает от чтения базы данных, называемой *makefile*. 
 ||
 |• [Makefile Contents](#Makefile-Contents)|  |What makefiles contain.|
 |• [Makefile Names](#Makefile-Names)|  |How to name your makefile.|
@@ -1693,22 +1694,28 @@ Next: [Makefile Names](#Makefile-Names), Previous: [Makefiles](#Makefiles), Up: 
 
 ### 3.1 What Makefiles Contain
 
-Makefiles contain five kinds of things: *explicit rules*, *implicit rules*, *variable definitions*, *directives*, and *comments*. Rules, variables, and directives are described at length in later chapters.
+> Что содержит make-файл
 
--   An *explicit rule* says when and how to remake one or more files, called the rule’s *targets*. It lists the other files that the targets depend on, called the *prerequisites* of the target, and may also give a recipe to use to create or update the targets. See [Writing Rules](#Rules).
--   An *implicit rule* says when and how to remake a class of files based on their names. It describes how a target may depend on a file with a name similar to the target and gives a recipe to create or update such a target. See [Using Implicit Rules](#Implicit-Rules).
--   A *variable definition* is a line that specifies a text string value for a variable that can be substituted into the text later. The simple makefile example shows a variable definition for `objects` as a list of all object files (see [Variables Make Makefiles Simpler](#Variables-Simplify)).
--   A *directive* is an instruction for `make` to do something special while reading the makefile. These include:
-    -   Reading another makefile (see [Including Other Makefiles](#Include)).
-    -   Deciding (based on the values of variables) whether to use or ignore a part of the makefile (see [Conditional Parts of Makefiles](#Conditionals)).
-    -   Defining a variable from a verbatim string containing multiple lines (see [Defining Multi-Line Variables](#Multi_002dLine)).
--   ‘\#’ in a line of a makefile starts a *comment*. It and the rest of the line are ignored, except that a trailing backslash not escaped by another backslash will continue the comment across multiple lines. A line containing just a comment (with perhaps spaces before it) is effectively blank, and is ignored. If you want a literal `#`, escape it with a backslash (e.g., `\#`). Comments may appear on any line in the makefile, although they are treated specially in certain situations.
+Make-файлы содержат пять видов "вещей": *explicit rules* (явные правила), *implicit rules* (неявные правила), *variable definitions* (определения переменных), *directives* (директивы) и *comments* (комментарии) . Правила, переменные и директивы подробно описаны в следующих главах.
 
-    You cannot use comments within variable references or function calls: any instance of `#` will be treated literally (rather than as the start of a comment) inside a variable reference or function call.
+- *explicit rule* (явное правило) говорит, когда и как переделывать один или несколько файлов, называемое *targets* (целями правила). В нем перечислены другие файлы, от которых зависят цели, называемые *prerequisites* (предварительными условиями) цели, а также может быть указан рецепт для использования при создании или обновлении целей. См. [Writing Rules](#Rules). 
 
-    Comments within a recipe are passed to the shell, just as with any other recipe text. The shell decides how to interpret it: whether or not this is a comment is up to the shell.
+- *implicit rule* (неявное правило) говорит, когда и как переделывать класс файлов на основе их имен. Он описывает, как цель может зависеть от файла с именем, аналогичным цели, и дает рецепт для создания или обновления такой цели. См. [Использование неявных правил](#Implicit-Rules). 
 
-    Within a `define` directive, comments are not ignored during the definition of the variable, but rather kept intact in the value of the variable. When the variable is expanded they will either be treated as `make` comments or as recipe text, depending on the context in which the variable is evaluated.
+- *variable definition* (определение переменной) - это строка, которая определяет значение текстовой строки для переменной, которая может быть подставлена в текст позже. В простом примере make-файла показано определение переменной для `objects` в виде списка всех объектных файлов (см. [Переменные упрощают сборку файлов](#Variables-Simplify)). 
+
+- *directive* (директива) - это инструкция для `make` делать что-то особенное при чтении make-файла, включая:
+     - Чтение другого make-файла (см. [Включение других Make-файлов](#Include)).
+     - Решение (на основе значений переменных) использовать или игнорировать часть make-файла (см. [Условные части Make-файлов](#Conditionals)).
+     - Определение переменной из дословной строки, содержащей несколько строк (см. [Определение многострочных переменных](#Multi_002dLine)).
+- `#` в строке make-файла начинает комментарий. Он и остальная часть строки игнорируются, за исключением того, что обратная косая черта в конце, не экранированная другой обратной косой чертой, продолжит комментарий на нескольких строках. Строка, содержащая только комментарий (возможно, с пробелами перед ним), фактически пуста и игнорируется. Если вам нужен буквальный символ `#`, используйте обратную косую черту (например, `\#`). Комментарии могут появляться в любой строке make-файла, хотя в определенных ситуациях они обрабатываются особым образом. 
+
+
+	 Вы не можете использовать комментарии в ссылках на переменные или вызовах функций: любой экземпляр `#` будет обрабатываться буквально (а не как начало комментария) внутри ссылки на переменную или вызова функции.
+
+     Комментарии в рецепте передаются в оболочку, как и в случае с любым другим текстом рецепта. Оболочка решает, как его интерпретировать: является ли это комментарием, зависит от оболочки.
+
+     В директиве `define` комментарии не игнорируются во время определения переменной, а скорее сохраняются в значении переменной. Когда переменная раскрывается, они будут рассматриваться либо как комментарии `make`, либо как текст рецепта, в зависимости от контекста, в котором оценивается переменная. 
 
 ||
 |• [Splitting Lines](#Splitting-Lines)|  |Splitting long lines in makefiles|
@@ -1719,32 +1726,33 @@ Previous: [Makefile Contents](#Makefile-Contents), Up: [Makefile Contents](#Make
 
 #### 3.1.1 Splitting Long Lines
 
-Makefiles use a “line-based” syntax in which the newline character is special and marks the end of a statement. GNU `make` has no limit on the length of a statement line, up to the amount of memory in your computer.
+В файлах `Makefile` используется «построчный» синтаксис, в котором символ новой строки является специальным и отмечает конец оператора. GNU `make` не имеет ограничений на длину строки оператора, вплоть до объема памяти на вашем компьютере.
 
-However, it is difficult to read lines which are too long to display without wrapping or scrolling. So, you can format your makefiles for readability by adding newlines into the middle of a statement: you do this by escaping the internal newlines with a backslash (`\`) character. Where we need to make a distinction we will refer to “physical lines” as a single line ending with a newline (regardless of whether it is escaped) and a “logical line” being a complete statement including all escaped newlines up to the first non-escaped newline.
+Однако трудно читать строки, которые слишком длинные для отображения без переноса или прокрутки. Таким образом, вы можете отформатировать свои make-файлы для удобства чтения, добавив символы новой строки в середине оператора: вы делаете это, экранируя внутренние символы новой строки с помощью символа обратной косой черты (`\`). Там, где нам нужно провести различие, мы будем называть «физические строки» одной строкой, оканчивающейся новой строкой (независимо от того, экранирована ли она), а «логическая строка» - это полное выражение, включающее все экранированные символы новой строки вплоть до первого неэкранированного-экранированный перевод строки. 
 
-The way in which backslash/newline combinations are handled depends on whether the statement is a recipe line or a non-recipe line. Handling of backslash/newline in a recipe line is discussed later (see [Splitting Recipe Lines](#Splitting-Recipe-Lines)).
+Способ обработки комбинаций *backslash/newline* (обратной косой черты + новой строки) зависит от того, является ли оператор строкой рецепта или строкой без рецепта. Обработка *backslash/newline* в строке рецепта обсуждается позже (см. [Разделение строк рецепта](#Splitting-Recipe-Lines)).
 
-Outside of recipe lines, backslash/newlines are converted into a single space character. Once that is done, all whitespace around the backslash/newline is condensed into a single space: this includes all whitespace preceding the backslash, all whitespace at the beginning of the line after the backslash/newline, and any consecutive backslash/newline combinations.
+Вне строк рецепта *backslash/newline* преобразуются в один символ пробела. Как только это будет сделано, все пробелы вокруг *backslash/newline* сжимаются в один пробел: это включает все пробелы, предшествующие обратной косой черте, все пробелы в начале строки после *backslash/newline* и любые последовательные комбинации *backslash/newline*.
 
-If the `.POSIX` special target is defined then backslash/newline handling is modified slightly to conform to POSIX.2: first, whitespace preceding a backslash is not removed and second, consecutive backslash/newlines are not condensed.
+Если определена специальная цель `.POSIX`, то обработка *backslash/newline* немного изменяется, чтобы соответствовать `POSIX.2`: во-первых, пробелы перед обратной косой чертой не удаляются, а во-вторых, последовательные *backslash/newline* не уплотняются.
 
 #### Splitting Without Adding Whitespace
 
-If you need to split a line but do *not* want any whitespace added, you can utilize a subtle trick: replace your backslash/newline pairs with the three characters dollar sign/backslash/newline:
+> Разделение без добавления пробелов
+
+Если вам нужно разбить строку, но не хотите добавлять пробелы, вы можете использовать тонкий трюк: замените пары обратной косой черты / новой строки тремя символами знака доллара / обратной косой черты / новой строки:
 
 ``` {.example}
 var := one$\
        word
 ```
-
-After `make` removes the backslash/newline and condenses the following line into a single space, this is equivalent to:
+После того, как `make` удаляет *backslash/newline* и уплотняет следующую строку в один пробел, это эквивалентно: 
 
 ``` {.example}
 var := one$ word
 ```
 
-Then `make` will perform variable expansion. The variable reference ‘\$ ’ refers to a variable with the one-character name “ ” (space) which does not exist, and so expands to the empty string, giving a final assignment which is the equivalent of:
+Затем `make` выполнит расширение переменной. Ссылка на переменную ‘\$’ относится к переменной с односимвольным именем « » (пробел), которая не существует, и поэтому расширяется до пустой строки, давая окончательное присвоение, которое является эквивалентом:
 
 ``` {.example}
 var := oneword
