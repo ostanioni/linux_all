@@ -374,13 +374,13 @@ Problems and bugs.
 An Introduction to Makefiles
 ```
 
-• [Rule Introduction](#Rule-Introduction)
+• [Введение в правила](#2.1-What-a-Rule-Looks-Like)
 
   
 
 What a rule looks like.
 
-• [Simple Makefile](#Simple-Makefile)
+• [Простой Makefile](#2.2-A-Simple-Makefile)
 
   
 
@@ -410,7 +410,7 @@ Letting `make` deduce the recipes.
 
 Another style of makefile.
 
-• [Cleanup](#Cleanup)
+• [Правила для очистки директории](#2.7-Rules-for-Cleaning-the-Directory)
 
   
 
@@ -1397,17 +1397,17 @@ Next: [Makefiles](#Makefiles), Previous: [Overview](#Overview), Up: [Top](#Top) 
 Когда `make` перекомпилирует программу "Текстовый редактор", каждый измененный исходный файл `C` должен быть перекомпилирован. Если файл заголовка был изменен, каждый исходный файл `C`, который включает файл заголовка, должен быть перекомпилирован. Каждая компиляция создает объектный файл, соответствующий исходному файлу. Наконец, если какой-либо исходный файл был перекомпилирован, все объектные файлы, независимо от того, были ли они созданы заново или сохранены из предыдущих компиляций, должны быть связаны вместе для создания нового исполняемого файла программы "Текстовый редактор". 
 
 ||
-|• [Rule Introduction](#Rule-Introduction)|  |What a rule looks like.|
-|• [Simple Makefile](#Simple-Makefile)|  |A simple makefile.|
+|• [Введение в правила](#2.1-What-a-Rule-Looks-Like)|  |Как писать правила|
+|• [Простой Makefile](#2.2-A-Simple-Makefile)|  |A simple makefile.|
 |• [How Make Works](#How-Make-Works)|  |How `make` processes this makefile.|
 |• [Variables Simplify](#Variables-Simplify)|  |Variables make makefiles simpler.|
 |• [make Deduces](#make-Deduces)|  |Letting `make` deduce the recipes.|
 |• [Combine By Prerequisite](#Combine-By-Prerequisite)|  |Another style of makefile.|
-|• [Cleanup](#Cleanup)|  |Rules for cleaning the directory.|
+|• [Правила для очистки директории](#2.7-Rules-for-Cleaning-the-Directory)|  |Rules for cleaning the directory.|
 
 * * * * *
 
-Next: [Simple Makefile](#Simple-Makefile), Previous: [Introduction](#Introduction), Up: [Introduction](#Introduction)   [[Contents](#Short-Table-of-Contents)][[Index](#Index-of-Concepts)]
+Next: [Простой Makefile](#2.2-A-Simple-Makefile), Previous: [Introduction](#Introduction), Up: [Introduction](#Introduction)   [[Contents](#Short-Table-of-Contents)][[Index](#Index-of-Concepts)]
 
 ### 2.1 What a Rule Looks Like
 
@@ -1434,7 +1434,7 @@ target … : prerequisites …
 
 * * * * *
 
-Next: [How Make Works](#How-Make-Works), Previous: [Rule Introduction](#Rule-Introduction), Up: [Introduction](#Introduction)   [[Contents](#Short-Table-of-Contents)][[Index](#Index-of-Concepts)]
+Next: [How Make Works](#How-Make-Works), Previous: [Введение в правила](#2.1-What-a-Rule-Looks-Like), Up: [Introduction](#Introduction)   [[Contents](#Short-Table-of-Contents)][[Index](#Index-of-Concepts)]
 
 ### 2.2 A Simple Makefile
 
@@ -1493,7 +1493,7 @@ make clean
 
 * * * * *
 
-Next: [Variables Simplify](#Variables-Simplify), Previous: [Simple Makefile](#Simple-Makefile), Up: [Introduction](#Introduction)   [[Contents](#Short-Table-of-Contents)][[Index](#Index-of-Concepts)]
+Next: [Variables Simplify](#Variables-Simplify), Previous: [Простой Makefile](#2.2-A-Simple-Makefile), Up: [Introduction](#Introduction)   [[Contents](#Short-Table-of-Contents)][[Index](#Index-of-Concepts)]
 
 ### 2.3 How `make` Processes a Makefile
 
@@ -1616,7 +1616,7 @@ clean :
 
 * * * * *
 
-Next: [Cleanup](#Cleanup), Previous: [make Deduces](#make-Deduces), Up: [Introduction](#Introduction)   [[Contents](#Short-Table-of-Contents)][[Index](#Index-of-Concepts)]
+Next: [Правила для очистки директории](#2.7-Rules-for-Cleaning-the-Directory), Previous: [make Deduces](#make-Deduces), Up: [Introduction](#Introduction)   [[Contents](#Short-Table-of-Contents)][[Index](#Index-of-Concepts)]
 
 ### 2.6 Another Style of Makefile
 
@@ -10511,7 +10511,7 @@ Section
 
  
 
-[Simple Makefile](#Simple-Makefile)
+[Простой Makefile](#2.2-A-Simple-Makefile)
 
 [`\` (backslash), in recipes](#index-_005c-_0028backslash_0029_002c-in-recipes):
 
@@ -10695,7 +10695,7 @@ B
 
  
 
-[Simple Makefile](#Simple-Makefile)
+[Простой Makefile](#2.2-A-Simple-Makefile)
 
 [backslash (`\`), in recipes](#index-backslash-_0028_005c_0029_002c-in-recipes):
 
@@ -10831,19 +10831,19 @@ C
 
  
 
-[Simple Makefile](#Simple-Makefile)
+[Простой Makefile](#2.2-A-Simple-Makefile)
 
 [`clean` target](#index-clean-target-1):
 
  
 
-[Cleanup](#Cleanup)
+[Правила для очистки директории](#2.7-Rules-for-Cleaning-the-Directory)
 
 [cleaning up](#index-cleaning-up):
 
  
 
-[Cleanup](#Cleanup)
+[Правила для очистки директории](#2.7-Rules-for-Cleaning-the-Directory)
 
 [`clobber` (standard target)](#index-clobber-_0028standard-target_0029):
 
@@ -10951,7 +10951,7 @@ C
 
  
 
-[Simple Makefile](#Simple-Makefile)
+[Простой Makefile](#2.2-A-Simple-Makefile)
 
 [controlling make](#index-controlling-make):
 
@@ -12209,7 +12209,7 @@ M
 
  
 
-[Rule Introduction](#Rule-Introduction)
+[Введение в правила](#2.1-What-a-Rule-Looks-Like)
 
 [makefile syntax, evaluating](#index-makefile-syntax_002c-evaluating):
 
@@ -12269,7 +12269,7 @@ M
 
  
 
-[Simple Makefile](#Simple-Makefile)
+[Простой Makefile](#2.2-A-Simple-Makefile)
 
 [makefiles, and `MAKEFILE_LIST` variable](#index-makefiles_002c-and-MAKEFILE_005fLIST-variable):
 
@@ -12399,7 +12399,7 @@ N
 
  
 
-[Simple Makefile](#Simple-Makefile)
+[Простой Makefile](#2.2-A-Simple-Makefile)
 
 [newline, quoting, in recipes](#index-newline_002c-quoting_002c-in-recipes):
 
@@ -12599,7 +12599,7 @@ P
 
  
 
-[Rule Introduction](#Rule-Introduction)
+[Введение в правила](#2.1-What-a-Rule-Looks-Like)
 
 [Pascal, rule to compile](#index-Pascal_002c-rule-to-compile):
 
@@ -12791,7 +12791,7 @@ P
 
  
 
-[Rule Introduction](#Rule-Introduction)
+[Введение в правила](#2.1-What-a-Rule-Looks-Like)
 
 [prerequisites, list of all](#index-prerequisites_002c-list-of-all):
 
@@ -12939,7 +12939,7 @@ Q
 
  
 
-[Simple Makefile](#Simple-Makefile)
+[Простой Makefile](#2.2-A-Simple-Makefile)
 
 [quoting newline, in recipes](#index-quoting-newline_002c-in-recipes):
 
@@ -12997,7 +12997,7 @@ R
 
  
 
-[Simple Makefile](#Simple-Makefile)
+[Простой Makefile](#2.2-A-Simple-Makefile)
 
 [recipe execution, single invocation](#index-recipe-execution_002c-single-invocation):
 
@@ -13105,7 +13105,7 @@ R
 
  
 
-[Rule Introduction](#Rule-Introduction)
+[Введение в правила](#2.1-What-a-Rule-Looks-Like)
 
 [recipes, quoting newlines in](#index-recipes_002c-quoting-newlines-in):
 
@@ -13321,7 +13321,7 @@ R
 
  
 
-[Cleanup](#Cleanup)
+[Правила для очистки директории](#2.7-Rules-for-Cleaning-the-Directory)
 
 [reporting bugs](#index-reporting-bugs):
 
@@ -13339,7 +13339,7 @@ R
 
  
 
-[Simple Makefile](#Simple-Makefile)
+[Простой Makefile](#2.2-A-Simple-Makefile)
 
 [`rm` (shell command)](#index-rm-_0028shell-command_0029-1):
 
@@ -13447,7 +13447,7 @@ R
 
  
 
-[Rule Introduction](#Rule-Introduction)
+[Введение в правила](#2.1-What-a-Rule-Looks-Like)
 
 [rule, multiple for one target](#index-rule_002c-multiple-for-one-target):
 
@@ -13709,7 +13709,7 @@ S
 
  
 
-[Simple Makefile](#Simple-Makefile)
+[Простой Makefile](#2.2-A-Simple-Makefile)
 
 [simple variable expansion](#index-simple-variable-expansion):
 
@@ -13959,7 +13959,7 @@ T
 
  
 
-[Rule Introduction](#Rule-Introduction)
+[Введение в правила](#2.1-What-a-Rule-Looks-Like)
 
 [`TAGS` (standard target)](#index-TAGS-_0028standard-target_0029):
 
@@ -14091,7 +14091,7 @@ T
 
  
 
-[Rule Introduction](#Rule-Introduction)
+[Введение в правила](#2.1-What-a-Rule-Looks-Like)
 
 [targets, multiple](#index-targets_002c-multiple):
 
