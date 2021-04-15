@@ -1849,23 +1849,25 @@ Next: [Overriding Makefiles](#Overriding-Makefiles), Previous: [MAKEFILES Variab
 
 ### 3.5 How Makefiles Are Remade
 
-Sometimes makefiles can be remade from other files, such as RCS or SCCS files. If a makefile can be remade from other files, you probably want `make` to get an up-to-date version of the makefile to read in.
+> Как make-файлы пересобирают
 
-To this end, after reading in all makefiles `make` will consider each as a goal target and attempt to update it. If a makefile has a rule which says how to update it (found either in that very makefile or in another one) or if an implicit rule applies to it (see [Using Implicit Rules](#Implicit-Rules)), it will be updated if necessary. After all makefiles have been checked, if any have actually been changed, `make` starts with a clean slate and reads all the makefiles over again. (It will also attempt to update each of them over again, but normally this will not change them again, since they are already up to date.) Each restart will cause the special variable `MAKE_RESTARTS` to be updated (see [Special Variables](#Special-Variables)).
+Иногда make-файлы могут быть переделаны из других файлов, таких как файлы RCS или SCCS. Если make-файл может быть переделан из других файлов, вы, вероятно, захотите, чтобы `make` получил последнюю версию make-файла для чтения. 
 
-If you know that one or more of your makefiles cannot be remade and you want to keep `make` from performing an implicit rule search on them, perhaps for efficiency reasons, you can use any normal method of preventing implicit rule look-up to do so. For example, you can write an explicit rule with the makefile as the target, and an empty recipe (see [Using Empty Recipes](#Empty-Recipes)).
+С этой целью, после прочтения всех make-файлов, `make` будет рассматривать каждый как цель и пытаться обновить ее. Если в make-файле есть правило, в котором говорится, как его обновить (находится либо в этом самом make-файле, либо в другом), или если к нему применяется неявное правило (см. [Использование неявных правил](#Implicit-Rules)), он будет при необходимости обновлятся. После проверки всех make-файлов, если они действительно были изменены, `make` начинает с чистого листа и заново читает все make-файлы. (Он также будет пытаться обновить каждый из них снова, но обычно это не изменит их, поскольку они уже обновлены.) Каждый перезапуск вызывает обновление специальной переменной MAKE_RESTARTS (см. [Специальные переменные](#Special-Variables)). 
 
-If the makefiles specify a double-colon rule to remake a file with a recipe but no prerequisites, that file will always be remade (see [Double-Colon](#Double_002dColon)). In the case of makefiles, a makefile that has a double-colon rule with a recipe but no prerequisites will be remade every time `make` is run, and then again after `make` starts over and reads the makefiles in again. This would cause an infinite loop: `make` would constantly remake the makefile, and never do anything else. So, to avoid this, `make` will **not** attempt to remake makefiles which are specified as targets of a double-colon rule with a recipe but no prerequisites.
+Если вы знаете, что один или несколько ваших make-файлов не могут быть переделаны, и вы хотите, чтобы `make` не выполнял для них неявный поиск правил, возможно, из соображений эффективности, вы можете использовать любой обычный метод предотвращения неявного поиска правил, чтобы выполнить так. Например, вы можете написать явное правило с make-файлом в качестве цели и пустым рецептом (см. [Использование пустых рецептов](#Empty-Recipes)).
 
-If you do not specify any makefiles to be read with ‘-f’ or ‘--file’ options, `make` will try the default makefile names; see [What Name to Give Your Makefile](#Makefile-Names). Unlike makefiles explicitly requested with ‘-f’ or ‘--file’ options, `make` is not certain that these makefiles should exist. However, if a default makefile does not exist but can be created by running `make` rules, you probably want the rules to be run so that the makefile can be used.
+Если в make-файлах указано правило двойного двоеточия для повторного создания файла с рецептом, но без предварительных требований, этот файл всегда будет переделан (см. [Двойное двоеточие](#Double_002dColon)). В случае make-файлов, make-файл, который имеет правило двойного двоеточия с рецептом, но без предварительных условий, будет переделываться каждый раз при запуске make, а затем снова после того, как make запускается заново и снова считывает make-файлы. Это вызовет бесконечный цикл: make будет постоянно переделывать make-файл и больше ничего не делать. Итак, чтобы избежать этого, `make` **не будет** пытаться переделать make-файлы, которые указаны как цели правила с двойным двоеточием с рецептом, но без предварительных условий. 
 
-Therefore, if none of the default makefiles exists, `make` will try to make each of them in the same order in which they are searched for (see [What Name to Give Your Makefile](#Makefile-Names)) until it succeeds in making one, or it runs out of names to try. Note that it is not an error if `make` cannot find or make any makefile; a makefile is not always necessary.
+Если вы не укажете какие-либо make-файлы для чтения с опциями `-f` или `--file`, `make` будет пробовать имена make-файлов по умолчанию; см. [Какое имя дать вашему файлу Makefile](#Makefile-Names). В отличие от make-файлов, явно запрошенных с параметрами `-f` или `--file`, `make` не гарантирует, что эти make-файлы должны существовать. Однако, если make-файл по умолчанию не существует, но может быть создан с помощью правил `make`, вы, вероятно, захотите, чтобы правила выполнялись, чтобы можно было использовать make-файл. 
 
-When you use the ‘-t’ or ‘--touch’ option (see [Instead of Executing Recipes](#Instead-of-Execution)), you would not want to use an out-of-date makefile to decide which targets to touch. So the ‘-t’ option has no effect on updating makefiles; they are really updated even if ‘-t’ is specified. Likewise, ‘-q’ (or ‘--question’) and ‘-n’ (or ‘--just-print’) do not prevent updating of makefiles, because an out-of-date makefile would result in the wrong output for other targets. Thus, ‘make -f mfile -n foo’ will update mfile, read it in, and then print the recipe to update foo and its prerequisites without running it. The recipe printed for foo will be the one specified in the updated contents of mfile.
+Следовательно, если ни один из make-файлов по умолчанию не существует, `make` будет пытаться сделать каждый из них в том же порядке, в котором они ищутся (см. [Какое имя дать вашему Make-файлу](#Makefile-Names)), пока не добьется успеха. В создании одного, или у него заканчиваются имена, чтобы попробовать. Заметьте, что это не ошибка, если make не может найти или создать какой-либо make-файл; make-файл не всегда нужен. 
 
-However, on occasion you might actually wish to prevent updating of even the makefiles. You can do this by specifying the makefiles as goals in the command line as well as specifying them as makefiles. When the makefile name is specified explicitly as a goal, the options ‘-t’ and so on do apply to them.
+Когда вы используете опцию `-t` или `--touch` (см. [Вместо выполнения рецептов](#Instead-of-Execution)), вы не захотите использовать устаревший make-файл, чтобы решить, какие цели трогать. Таким образом, опция `-t` не влияет на обновление make-файлов; они действительно обновляются, даже если указано `-t`. Точно так же `-q` (или `--question`) и `-n` (или `--just-print`) не предотвращают обновление make-файлов, потому что устаревший make-файл приведет к неправильному выводу для других целей. Таким образом, `make -f mfile -n foo` обновит `mfile`, прочитает его, а затем распечатает рецепт для обновления foo и его предварительных условий без его запуска. Рецепт, напечатанный для foo, будет тот, который указан в обновленном содержимом `mfile`.
 
-Thus, ‘make -f mfile -n mfile foo’ would read the makefile mfile, print the recipe needed to update it without actually running it, and then print the recipe needed to update foo without running that. The recipe for foo will be the one specified by the existing contents of mfile.
+Однако иногда вы можете захотеть предотвратить обновление даже make-файлов. Вы можете сделать это, указав make-файлы как цели в командной строке, а также указав их как make-файлы. Когда имя make-файла явно указано в качестве цели, к ним применяются параметры `-t` и т. д.
+
+Таким образом, `make -f mfile -n mfile foo` прочитает make-файл mfile, распечатает рецепт, необходимый для его обновления, не запуская его, а затем распечатает рецепт, необходимый для обновления foo без его запуска. Рецепт для foo будет тот, который указан в существующем содержимом `mfile`. 
 
 * * * * *
 
@@ -1873,11 +1875,13 @@ Next: [Reading Makefiles](#Reading-Makefiles), Previous: [Remaking Makefiles](#R
 
 ### 3.6 Overriding Part of Another Makefile
 
-Sometimes it is useful to have a makefile that is mostly just like another makefile. You can often use the ‘include’ directive to include one in the other, and add more targets or variable definitions. However, it is invalid for two makefiles to give different recipes for the same target. But there is another way.
+> Замещение части другого Makefile 
 
-In the containing makefile (the one that wants to include the other), you can use a match-anything pattern rule to say that to remake any target that cannot be made from the information in the containing makefile, `make` should look in another makefile. See [Pattern Rules](#Pattern-Rules), for more information on pattern rules.
+Иногда бывает полезно иметь make-файл, который в основном похож на другой make-файл. Вы можете использовать директиву `include` для включения одного в другой и добавления дополнительных целей или определений переменных. Однако недопустимо, чтобы два make-файла давали разные рецепты для одной и той же цели. Но есть другой способ. 
 
-For example, if you have a makefile called Makefile that says how to make the target ‘foo’ (and other targets), you can write a makefile called GNUmakefile that contains:
+В содержащем make-файле (том, который хочет включить другой) вы можете использовать шаблонное правило сопоставления с чем угодно, чтобы сказать, что для переделки любой цели, которая не может быть создана из информации в содержащем make-файле, `make` должен искать в другом `makefile`. См. [Шаблонные правила](#Pattern-Rules) для получения дополнительной информации о шаблонных правилах. 
+
+Например, если у вас есть make-файл с именем `Makefile`, в котором говорится, как сделать цель `foo` (и другие цели), вы можете написать make-файл с именем `GNUmakefile`, который содержит:
 
 ``` {.example}
 foo:
@@ -1888,9 +1892,9 @@ foo:
 force: ;
 ```
 
-If you say ‘make foo’, `make` will find GNUmakefile, read it, and see that to make foo, it needs to run the recipe ‘frobnicate \> foo’. If you say ‘make bar’, `make` will find no way to make bar in GNUmakefile, so it will use the recipe from the pattern rule: ‘make -f Makefile bar’. If Makefile provides a rule for updating bar, `make` will apply the rule. And likewise for any other target that GNUmakefile does not say how to make.
+Если вы скажете `make foo`, `make` найдет `GNUmakefile`, прочитает его и увидит, что для создания `foo` необходимо выполнить рецепт `frobnicate \> foo`. Если вы скажете `make bar`, `make` не найдет способа создать bar в `GNUmakefile`, поэтому будет использовать рецепт из правила шаблона: `make -f Makefile bar`. Если `Makefile` предоставляет правило для обновления панели, make применит это правило. И то же самое для любой другой цели, которую `GNUmakefile` не сообщает, как ее создать. 
 
-The way this works is that the pattern rule has a pattern of just ‘%’, so it matches any target whatever. The rule specifies a prerequisite force, to guarantee that the recipe will be run even if the target file already exists. We give the force target an empty recipe to prevent `make` from searching for an implicit rule to build it—otherwise it would apply the same match-anything rule to force itself and create a prerequisite loop!
+Это работает так: шаблонное правило имеет шаблон `%`, поэтому он соответствует любой цели. Правило определяет обязательную силу, чтобы гарантировать, что рецепт будет запущен, даже если целевой файл уже существует. Мы даем цели `force` пустой рецепт, чтобы программа `make` не могла искать неявное правило для ее создания - в противном случае она применила бы то же правило соответствия чему угодно, чтобы заставить себя и создать предварительный цикл!
 
 * * * * *
 
@@ -1898,17 +1902,19 @@ Next: [Parsing Makefiles](#Parsing-Makefiles), Previous: [Overriding Makefiles](
 
 ### 3.7 How `make` Reads a Makefile
 
-GNU `make` does its work in two distinct phases. During the first phase it reads all the makefiles, included makefiles, etc. and internalizes all the variables and their values and implicit and explicit rules, and builds a dependency graph of all the targets and their prerequisites. During the second phase, `make` uses this internalized data to determine which targets need to be updated and run the recipes necessary to update them.
+> Как `make` читает Makefile
 
-It’s important to understand this two-phase approach because it has a direct impact on how variable and function expansion happens; this is often a source of some confusion when writing makefiles. Below is a summary of the different constructs that can be found in a makefile, and the phase in which expansion happens for each part of the construct.
+GNU `make` выполняет свою работу в два отдельных этапа. На первом этапе он читает все make-файлы, включая make-файлы и т. Д., Усваивает все переменные и их значения, а также неявные и явные правила, а также строит граф зависимостей для всех целей и их предварительных требований. На втором этапе `make` использует эти внутренние данные, чтобы определить, какие цели необходимо обновить, и запускает рецепты, необходимые для их обновления. 
 
-We say that expansion is *immediate* if it happens during the first phase: `make` will expand that part of the construct as the makefile is parsed. We say that expansion is *deferred* if it is not immediate. Expansion of a deferred construct part is delayed until the expansion is used: either when it is referenced in an immediate context, or when it is needed during the second phase.
+Важно понимать этот двухэтапный подход, поскольку он напрямую влияет на то, как происходит расширение переменных и функций; это часто является источником некоторой путаницы при написании make-файлов. Ниже приводится сводка различных конструкций, которые можно найти в make-файле, а также этап, на котором происходит расширение для каждой части конструкции. 
 
-You may not be familiar with some of these constructs yet. You can reference this section as you become familiar with them, in later chapters.
+Мы говорим, что расширение является *immediate* (немедленным), если оно происходит во время первой фазы: `make` будет расширять эту часть конструкции по мере анализа make-файла. Мы говорим, что расширение *deferred* (отложено), если оно не происходит немедленно. Расширение отложенной части конструкции откладывается до тех пор, пока раскрытие не будет использовано: либо когда на нее ссылаются в непосредственном контексте, либо когда это необходимо во время второй фазы. 
+
+Возможно, вы еще не знакомы с некоторыми из этих конструкций. Вы можете ссылаться на этот раздел по мере ознакомления с ними в последующих главах.
 
 #### Variable Assignment
 
-Variable definitions are parsed as follows:
+Определения переменных разбираются следующим образом:
 
 ``` {.example}
 immediate = deferred
@@ -1946,25 +1952,26 @@ define immediate !=
   immediate
 endef
 ```
+Для оператора добавления `+ =` правая часть считается немедленной, если переменная ранее была установлена как простая переменная (`: =` или `:: =`), и откладывается в противном случае.
 
-For the append operator ‘+=’, the right-hand side is considered immediate if the variable was previously set as a simple variable (‘:=’ or ‘::=’), and deferred otherwise.
-
-For the shell assignment operator ‘!=’, the right-hand side is evaluated immediately and handed to the shell. The result is stored in the variable named on the left, and that variable becomes a simple variable (and will thus be re-evaluated on each reference).
+Для оператора присваивания оболочки `! =` правая часть немедленно оценивается и передается оболочке. Результат сохраняется в переменной с именем слева, и эта переменная становится простой переменной (и, таким образом, будет повторно оцениваться для каждой ссылки).
 
 #### Conditional Directives
 
-Conditional directives are parsed immediately. This means, for example, that automatic variables cannot be used in conditional directives, as automatic variables are not set until the recipe for that rule is invoked. If you need to use automatic variables in a conditional directive you *must* move the condition into the recipe and use shell conditional syntax instead.
+> Условные директивы
+
+Условные директивы анализируются немедленно. Это означает, например, что автоматические переменные не могут использоваться в условных директивах, поскольку автоматические переменные не устанавливаются до тех пор, пока не будет вызван рецепт для этого правила. Если вам нужно использовать автоматические переменные в условной директиве, вы *должны* переместить условие в рецепт и вместо этого использовать условный синтаксис оболочки.
 
 #### Rule Definition
 
-A rule is always expanded the same way, regardless of the form:
+Правило всегда раскрывается одинаково, независимо от формы:
 
 ``` {.example}
 immediate : immediate ; deferred
         deferred
 ```
 
-That is, the target and prerequisite sections are expanded immediately, and the recipe used to build the target is always deferred. This is true for explicit rules, pattern rules, suffix rules, static pattern rules, and simple prerequisite definitions.
+То есть целевой и предварительный разделы раскрываются немедленно, а рецепт, используемый для создания целевого объекта, всегда откладывается. Это верно для явных правил, шаблонных правил, суффиксных правил, статических шаблонных правил и простых определений предварительных условий. 
 
 * * * * *
 
@@ -1972,24 +1979,25 @@ Next: [Secondary Expansion](#Secondary-Expansion), Previous: [Reading Makefiles]
 
 ### 3.8 How Makefiles Are Parsed
 
-GNU `make` parses makefiles line-by-line. Parsing proceeds using the following steps:
+> Как make-файлы парсятся
 
-1.  Read in a full logical line, including backslash-escaped lines (see [Splitting Long Lines](#Splitting-Lines)).
-2.  Remove comments (see [What Makefiles Contain](#Makefile-Contents)).
-3.  If the line begins with the recipe prefix character and we are in a rule context, add the line to the current recipe and read the next line (see [Recipe Syntax](#Recipe-Syntax)).
-4.  Expand elements of the line which appear in an *immediate* expansion context (see [How `make` Reads a Makefile](#Reading-Makefiles)).
-5.  Scan the line for a separator character, such as ‘:’ or ‘=’, to determine whether the line is a macro assignment or a rule (see [Recipe Syntax](#Recipe-Syntax)).
-6.  Internalize the resulting operation and read the next line.
+GNU `make` анализирует make-файлы построчно. Парсинг проходит по следующим шагам: 
 
-An important consequence of this is that a macro can expand to an entire rule, *if it is one line long*. This will work:
+1.  Читает всю логическую строку, включая строки с экранированием обратной косой чертой (см. [Разделение длинных строк](#Splitting-Lines)).
+2.  Удаляет комментарии (see [What Makefiles Contain](#Makefile-Contents)).
+3.  Если строка начинается с символа префикса рецепта и мы находимся в контексте правила, добавляет строку в текущий рецепт и читает следующую строку. (see [Recipe Syntax](#Recipe-Syntax)).
+4.  Расширяет элементы строки, которые появляются в контексте *immediate** (немедленного) расширения (see [How `make` Reads a Makefile](#Reading-Makefiles)).
+5.  Сканирует строку на наличие разделителя, например `:` или `=`, чтобы определить, является ли строка назначением макроса или правилом (see [Recipe Syntax](#Recipe-Syntax)).
+6.  Усваивает (Internalize) полученную операцию и читает следующую строку.
+
+Важным следствием этого является то, что макрос может расширяться до целого правила *if it is one line long* (если он состоит из одной строки). Это будет работать: 
 
 ``` {.example}
 myrule = target : ; echo built
 
 $(myrule)
 ```
-
-However, this will not work because `make` does not re-split lines after it has expanded them:
+Однако это не сработает, потому что `make` не разделяет строки повторно после того, как расширил их:
 
 ``` {.example}
 define myrule
@@ -1999,10 +2007,9 @@ endef
 
 $(myrule)
 ```
+Приведенный выше make-файл приводит к определению цели «target» с предварительными условиями `echo` и `built`, как если бы make-файл содержал `target: echo built`, а не правило с рецептом. Новые строки, все еще присутствующие в строке после завершения раскрытия, игнорируются как обычные пробелы.
 
-The above makefile results in the definition of a target ‘target’ with prerequisites ‘echo’ and ‘built’, as if the makefile contained `target: echo built`, rather than a rule with a recipe. Newlines still present in a line after expansion is complete are ignored as normal whitespace.
-
-In order to properly expand a multi-line macro you must use the `eval` function: this causes the `make` parser to be run on the results of the expanded macro (see [Eval Function](#Eval-Function)).
+Чтобы правильно развернуть многострочный макрос, вы должны использовать функцию `eval`: это заставляет парсер` make` запускаться на результатах развернутого макроса. (see [Eval Function](#Eval-Function)).
 
 * * * * *
 
