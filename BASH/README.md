@@ -2,40 +2,31 @@
 Оглавление:
 
 > 1. [uname](#uname)
-
 > 2. [who](#who)
-
 > 3. [w](#w)
-
 > 4. [ls](#ls)
-
 > 5. [tar](#tar)
-
 > 6. [rsync](#rsync)
-
 > 7. [find](#find)
-
 > 8. [locate](#locate)
-
 > 9. [systemctl](#systemctl)
-
 > 10. [journalctl](#journalctl)
-[kill](#kill)
-[killall](#killall)
-[curl](#curl)
-[tail](#tail)
-[cat](#cat)
-[grep](#grep)
-[top](#top)
-[netstat](#netstat)
-[ip](#ip)
-[lsof](#lsof)
-[df](#df)
-[du](#du)
-[id](#id)
-[chmod](#chmod)
-[sestatus](#setstatus)
-[history](#history)
+> 11. [kill](#kill)
+> 12. [killall](#killall)
+> 13. [curl](#curl)
+> 14. [tail](#tail)
+> 15. [cat](#cat)
+> 16. [grep](#grep)
+> 17. [top](#top)
+> 18. [netstat](#netstat)
+> 19. [ip](#ip)
+> 20. [lsof](#lsof)
+> 21. [df](#df)
+> 22. [du](#du)
+> 23. [id](#id)
+> 24. [chmod](#chmod)
+> 25. [sestatus](#setstatus)
+> 26. [history](#history)
 
 ### uname
 
