@@ -1,32 +1,41 @@
 
 Оглавление:
 
-    Команда [uname](#uname)
-    Команда [who](#who)
-    Команда [w](#w)
-    Команда [ls](#ls)
-    Команда [tar](#tar)
-    Команда [rsync](#rsync)
-    Команда [find ](#find)
-    Команда [locate](#locate)
-    Команда [systemctl](#systemctl)
-    Команда [journalctl](#journalctl)
-    Команда [kill](#kill)
-    Команда [killall](#killall)
-    Команда [curl](#curl)
-    Команда [tail](#tail)
-    Команда [cat](#cat)
-    Команда [grep](#grep)
-    Команда [top](#top)
-    Команда [netstat](#netstat)
-    Команда [ip](#ip)
-    Команда [lsof](#lsof)
-    Команда [df](#df)
-    Команда [du](#du)
-    Команда [id](#id)
-    Команда [chmod](#chmod)
-    Команда [sestatus](#setstatus)
-    Команда [history](#history)
+> 1. [uname](#uname)
+
+> 2. [who](#who)
+
+> 3. [w](#w)
+
+> 4. [ls](#ls)
+
+> 5. [tar](#tar)
+
+> 6. [rsync](#rsync)
+
+> 7. [find](#find)
+
+> 8. [locate](#locate)
+
+> 9. [systemctl](#systemctl)
+
+> 10. [journalctl](#journalctl)
+[kill](#kill)
+[killall](#killall)
+[curl](#curl)
+[tail](#tail)
+[cat](#cat)
+[grep](#grep)
+[top](#top)
+[netstat](#netstat)
+[ip](#ip)
+[lsof](#lsof)
+[df](#df)
+[du](#du)
+[id](#id)
+[chmod](#chmod)
+[sestatus](#setstatus)
+[history](#history)
 
 ### uname
 
