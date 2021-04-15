@@ -1,7 +1,7 @@
 
 # Краткое содержание
 
--   [1 Обзор утилиты `make`](#1-Overview-of-`make`)
+-   [1 Обзор утилиты `make`](#1-Overview-of-make)
 -   [2 Введение в Makefiles](#2-An-Introduction-to-Makefiles)
 -   [3 Написание Makefiles](#3-Writing-Makefiles)
 -   [4 Написание Правил (Rules)](#4-Writing-Rules)
@@ -1304,7 +1304,7 @@ Using the jobserver on Windows systems.
 
 Next: [Introduction](#Introduction), Previous: [Top](#Top), Up: [Top](#Top)   [[Contents](#Short-Table-of-Contents)][[Index](#Index-of-Concepts)]
 
-## 1 Overview of `make`
+## 1 Overview of make
 
 > Обзор программы `make`
 
