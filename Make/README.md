@@ -2042,7 +2042,7 @@ AVAR = bottom
 
 Здесь предпосылка `onefile` будет немедленно расширена и разрешена до значения `top`, в то время как предпосылка `twoofile` не будет полностью развернута до тех пор, пока вторичное расширение не даст значение `bottom`.
 
-This is marginally more exciting, but the true power of this feature only becomes apparent when you discover that secondary expansions always take place within the scope of the automatic variables for that target. This means that you can use variables such as `$@`, `$*`, etc. during the second expansion and they will have their expected values, just as in the recipe. All you have to do is defer the expansion by escaping the `$`. Also, secondary expansion occurs for both explicit and implicit (pattern) rules. Knowing this, the possible uses for this feature increase dramatically. For example:
+Это немного интереснее, но истинная мощь этой функции становится очевидной только тогда, когда вы обнаруживаете, что вторичные расширения всегда происходят в рамках автоматических переменных для этой цели. Это означает, что вы можете использовать такие переменные, как `$@`, `$*` и т.д. во время второго раскрытия, и они будут иметь свои ожидаемые значения, как в рецепте. Все, что вам нужно сделать, это отложить раскрытие, избегая символа `$`. Кроме того, вторичное раскрытие происходит как для явных, так и для неявных (шаблонных) правил. Зная это, возможности использования этой функции резко возрастают. Например:
 
 ``` {.example}
 .SECONDEXPANSION:
@@ -2051,11 +2051,10 @@ lib_OBJS := lib.o api.o
 
 main lib: $$($$@_OBJS)
 ```
+Здесь, после начального расширения, предварительными условиями для целей `main` и `lib` будут `$($@_OBJS)`. Во время вторичного раскрытия переменной `$@` присваивается имя цели, поэтому расширение для основной цели даст `$(main_OBJS)` или `main.o try.o test.o`, в то время как вторичное расширение для целевой библиотеки даст `$(lib_OBJS)` или `lib.o api.o`.
 
-Here, after the initial expansion the prerequisites of both the main and lib targets will be `$($@_OBJS)`. During the secondary expansion, the `$@` variable is set to the name of the target and so the expansion for the main target will yield `$(main_OBJS)`, or `main.o try.o test.o`, while the secondary expansion for the lib target will yield `$(lib_OBJS)`, or `lib.o api.o`.
-
-You can also mix in functions here, as long as they are properly escaped:
-
+Вы также можете смешивать здесь функции, если они правильно экранированы: 
+ 
 ``` {.example}
 main_SRCS := main.c try.c test.c
 lib_SRCS := lib.c api.c
@@ -2063,14 +2062,15 @@ lib_SRCS := lib.c api.c
 .SECONDEXPANSION:
 main lib: $$(patsubst %.c,%.o,$$($$@_SRCS))
 ```
+Эта версия позволяет пользователям указывать исходные файлы, а не объектные файлы, но дает тот же результирующий список предварительных требований, что и в предыдущем примере.
 
-This version allows users to specify source files rather than object files, but gives the same resulting prerequisites list as the previous example.
-
-Evaluation of automatic variables during the secondary expansion phase, especially of the target name variable `$$@`, behaves similarly to evaluation within recipes. However, there are some subtle differences and “corner cases” which come into play for the different types of rule definitions that `make` understands. The subtleties of using the different automatic variables are described below.
+Оценка автоматических переменных во время фазы вторичного раскрытия, особенно переменной целевого имени `$$@`, ведет себя аналогично оценке в рецептах. Однако есть некоторые тонкие различия и «угловые случаи», которые вступают в игру для различных типов определений правил, которые понимает `make`. Тонкости использования различных автоматических переменных описаны ниже.
 
 #### Secondary Expansion of Explicit Rules
 
-During the secondary expansion of explicit rules, `$$@` and `$$%` evaluate, respectively, to the file name of the target and, when the target is an archive member, the target member name. The `$$<` variable evaluates to the first prerequisite in the first rule for this target. `$$^` and `$$+` evaluate to the list of all prerequisites of rules *that have already appeared* for the same target (`$$+` with repetitions and `$$^` without). The following example will help illustrate these behaviors:
+> Вторичное расширение явных правил
+
+Во время вторичного расширения явных правил `$$@` и `$$%` оценивают, соответственно, имя файла цели и, если цель является членом архива, имя целевого члена. Переменная `$$<` соответствует первому предварительному условию в первом правиле для этой цели. `$$^` и `$$+` оценивают список всех предварительных условий правил, *которые уже появились* для той же цели (`$$+` с повторениями и `$$^` без). Следующий пример поможет проиллюстрировать это поведение:
 
 ``` {.example}
 .SECONDEXPANSION:
@@ -2082,19 +2082,22 @@ foo: foo.2 bar.2 $$< $$^ $$+    # line #2
 foo: foo.3 bar.3 $$< $$^ $$+    # line #3
 ```
 
-In the first prerequisite list, all three variables (`$$<`, `$$^`, and `$$+`) expand to the empty string. In the second, they will have values `foo.1`, `foo.1 bar.1`, and `foo.1 bar.1` respectively. In the third they will have values `foo.1`, `foo.1 bar.1 foo.2 bar.2`, and `foo.1 bar.1 foo.2 bar.2 foo.1 foo.1 bar.1 foo.1 bar.1` respectively.
+В первом списке предварительных требований все три переменные (`$$<`, `$$^` и `$$+`) заменяются пустой строкой. Во втором они будут иметь значения `foo.1`, `foo.1 bar.1` и `foo.1 bar.1` соответственно. В третьем они будут иметь значения `foo.1`,` foo.1 bar.1 foo.2 bar.2` и `foo.1 bar.1 foo.2 bar.2 foo.1 foo.1 bar.1 foo.1, bar.1` соответственно.
 
-Rules undergo secondary expansion in makefile order, except that the rule with the recipe is always evaluated last.
+Правила подвергаются вторичному расширению в порядке make-файла, за исключением того, что правило с рецептом всегда оценивается последним.
 
-The variables `$$?` and `$$*` are not available and expand to the empty string.
-
+Переменные `$$?` И `$$*` недоступны и заменяются пустой строкой. 
 #### Secondary Expansion of Static Pattern Rules
 
-Rules for secondary expansion of static pattern rules are identical to those for explicit rules, above, with one exception: for static pattern rules the `$$*` variable is set to the pattern stem. As with explicit rules, `$$?` is not available and expands to the empty string.
+> Вторичное расширение правил статического паттерна
+
+Правила для вторичного раскрытия правил статического шаблона идентичны правилам для явных правил, приведенных выше, за одним исключением: для правил статического шаблона переменная `$$*` устанавливается в основу шаблона. Как и в случае явных правил, `$$?` недоступен и заменяется пустой строкой.
 
 #### Secondary Expansion of Implicit Rules
 
-As `make` searches for an implicit rule, it substitutes the stem and then performs secondary expansion for every rule with a matching target pattern. The value of the automatic variables is derived in the same fashion as for static pattern rules. As an example:
+> Вторичное расширение неявных правил
+
+Когда `make` ищет неявное правило, он заменяет основу, а затем выполняет вторичное раскрытие для каждого правила с совпадающим целевым шаблоном. Значение автоматических переменных выводится таким же образом, как и для правил статического шаблона. В качестве примера:
 
 ``` {.example}
 .SECONDEXPANSION:
@@ -2106,9 +2109,9 @@ foo foz: fo%: bo%
 %oo: $$< $$^ $$+ $$*
 ```
 
-When the implicit rule is tried for target foo, `$$<` expands to bar, `$$^` expands to bar boo, `$$+` also expands to bar boo, and `$$*` expands to f.
+Когда неявное правило пробуется для целевого `foo`, `$$ <` расширяется до `bar`, `$$^` расширяется до bar boo, `$$+` также расширяется до bar boo, а `$$*` расширяется до `f`. 
 
-Note that the directory prefix (D), as described in [Implicit Rule Search Algorithm](#Implicit-Rule-Search), is appended (after expansion) to all the patterns in the prerequisites list. As an example:
+Обратите внимание, что префикс каталога (D), как описано в [Алгоритм неявного поиска правила] (#Implicit-Rule-Search), добавляется (после раскрытия) ко всем шаблонам в списке предварительных требований. В качестве примера:
 
 ``` {.example}
 .SECONDEXPANSION:
@@ -2119,7 +2122,7 @@ Note that the directory prefix (D), as described in [Implicit Rule Search Algori
         @echo $^
 ```
 
-The prerequisite list printed, after the secondary expansion and directory prefix reconstruction, will be /tmp/foo/foo.c /tmp/bar/foo.c foo.h. If you are not interested in this reconstruction, you can use `$$*` instead of `%` in the prerequisites list.
+Список предварительных требований, напечатанный после вторичного раскрытия и реконструкции префикса каталога, будет `/tmp/foo/foo.c /tmp/bar/foo.c foo.h`. Если вас не интересует эта реконструкция, вы можете использовать `$$*` вместо `%` в списке предварительных требований.
 
 * * * * *
 
@@ -2128,11 +2131,13 @@ Next: [Recipes](#Recipes), Previous: [Makefiles](#Makefiles), Up: [Top](#Top)  
 4 Writing Rules
 ---------------
 
-A *rule* appears in the makefile and says when and how to remake certain files, called the rule’s *targets* (most often only one per rule). It lists the other files that are the *prerequisites* of the target, and the *recipe* to use to create or update the target.
+> Написание правил
 
-The order of rules is not significant, except for determining the *default goal*: the target for `make` to consider, if you do not otherwise specify one. The default goal is the target of the first rule in the first makefile. If the first rule has multiple targets, only the first target is taken as the default. There are two exceptions: a target starting with a period is not a default unless it contains one or more slashes, ‘/’, as well; and, a target that defines a pattern rule has no effect on the default goal. (See [Defining and Redefining Pattern Rules](#Pattern-Rules).)
+*Rule* (правило) появляется в make-файле и говорит, когда и как переделывать определенные файлы, называемые *targets* (целями правила) (чаще всего только по одному на правило). В нем перечислены другие файлы, которые являются *prerequisites* предпосылками цели, и *recipe* (рецептом), который следует использовать для создания или обновления цели. 
 
-Therefore, we usually write the makefile so that the first rule is the one for compiling the entire program or all the programs described by the makefile (often with a target called ‘all’). See [Arguments to Specify the Goals](#Goals).
+Порядок правил не имеет значения, за исключением определения *default goal* (цели по умолчанию): цель, которую должна учитывать `make`, если вы не укажете ее иначе. По умолчанию цель - это цель первого правила в первом make-файле. Если первое правило имеет несколько целей, по умолчанию принимается только первая цель. Есть два исключения: цель, начинающаяся с точки, не является значением по умолчанию, если она также не содержит одну или несколько косых черт, «/»; и цель, определяющая шаблонное правило, не влияет на цель по умолчанию. (См. [Определение и переопределение правил шаблона](#Pattern-Rules).)
+
+Поэтому мы обычно пишем make-файл так, чтобы первое правило было правилом для компиляции всей программы или всех программ, описываемых make-файлом (часто с целью, называемой «all»). См. [Аргументы для определения целей](#Goals). 
 
 ||
 |• [Rule Example](#Rule-Example)|  |An example explained.|
@@ -2156,19 +2161,21 @@ Next: [Rule Syntax](#Rule-Syntax), Previous: [Rules](#Rules), Up: [Rules](#Rules
 
 ### 4.1 Rule Example
 
-Here is an example of a rule:
+> Пример правила
+
+Вот пример правила:
 
 ``` {.example}
 foo.o : foo.c defs.h       # module for twiddling the frobs
         cc -c -g foo.c
 ```
 
-Its target is foo.o and its prerequisites are foo.c and defs.h. It has one command in the recipe: ‘cc -c -g foo.c’. The recipe starts with a tab to identify it as a recipe.
+Его цель `foo.o`, а предварительные условия `foo.c` и `defs.h`. В рецепте есть одна команда: `cc -c -g foo.c`. Рецепт начинается с вкладки, позволяющей идентифицировать его как рецепт.
 
-This rule says two things:
+Это правило говорит о двух вещах:
 
--   How to decide whether foo.o is out of date: it is out of date if it does not exist, or if either foo.c or defs.h is more recent than it.
--   How to update the file foo.o: by running `cc` as stated. The recipe does not explicitly mention defs.h, but we presume that foo.c includes it, and that is why defs.h was added to the prerequisites.
+-  Как определить, устарел ли `foo.o`: он устарел, если не существует, или если либо `foo.c`, либо `defs.h` более новый, чем он.
+-  Как обновить файл `foo.o`: запустив `cc`, как указано. В рецепте явно не упоминается `defs.h`, но мы предполагаем, что `foo.c` включает его, и именно поэтому `defs.h` был добавлен в предварительные условия.
 
 * * * * *
 
@@ -2176,7 +2183,9 @@ Next: [Prerequisite Types](#Prerequisite-Types), Previous: [Rule Example](#Rule-
 
 ### 4.2 Rule Syntax
 
-In general, a rule looks like this:
+> Синтаксис правил
+
+В целом правило выглядит так:
 
 ``` {.example}
 targets : prerequisites
@@ -2191,20 +2200,19 @@ targets : prerequisites ; recipe
         recipe
         …
 ```
+Целями являются имена файлов, разделенные пробелами. Могут использоваться подстановочные знаки (см. [Использование подстановочных знаков в именах файлов](#Wildcards)), а имя формы a (m) представляет член m в архивном файле a (см. [Archive Members as Targets](#Archive-Members) )). Обычно для каждого правила существует только одна цель, но иногда есть причина иметь больше (см. [Несколько целей в правиле](#Multiple-Targets)). 
 
-The targets are file names, separated by spaces. Wildcard characters may be used (see [Using Wildcard Characters in File Names](#Wildcards)) and a name of the form a(m) represents member m in archive file a (see [Archive Members as Targets](#Archive-Members)). Usually there is only one target per rule, but occasionally there is a reason to have more (see [Multiple Targets in a Rule](#Multiple-Targets)).
+Строки рецепта начинаются с символа табуляции (или первого символа в значении переменной `.RECIPEPREFIX`; см. [Специальные переменные](#Special-Variables)). Первая строка рецепта может появиться в строке после предварительных условий с помощью символа табуляции или может появиться в той же строке с точкой с запятой. В любом случае эффект тот же. Есть и другие отличия в синтаксисе рецептов. См. [Написание рецептов в правилах](#Recipes).
 
-The recipe lines start with a tab character (or the first character in the value of the `.RECIPEPREFIX` variable; see [Special Variables](#Special-Variables)). The first recipe line may appear on the line after the prerequisites, with a tab character, or may appear on the same line, with a semicolon. Either way, the effect is the same. There are other differences in the syntax of recipes. See [Writing Recipes in Rules](#Recipes).
+Поскольку знаки доллара используются для начала ссылок на переменные `make`, если вам действительно нужен знак доллара в цели или предварительном условии, вы должны написать два из них, '\$\$' (см. [Как использовать переменные](#Using-Variables)). Если вы включили вторичное расширение (см. [Secondary Expansion](#Secondary-Expansion)) и хотите, чтобы в списке предварительных требований был буквальный знак доллара, вы должны фактически написать *четыре* знака доллара ('\$\$\$\$').
 
-Because dollar signs are used to start `make` variable references, if you really want a dollar sign in a target or prerequisite you must write two of them, ‘\$\$’ (see [How to Use Variables](#Using-Variables)). If you have enabled secondary expansion (see [Secondary Expansion](#Secondary-Expansion)) and you want a literal dollar sign in the prerequisites list, you must actually write *four* dollar signs (‘\$\$\$\$’).
+Вы можете разделить длинную строку, вставив обратную косую черту, за которой следует новая строка, но это не обязательно, так как `make` не накладывает ограничений на длину строки в make-файле.
 
-You may split a long line by inserting a backslash followed by a newline, but this is not required, as `make` places no limit on the length of a line in a makefile.
+Правило сообщает `make` две вещи: когда цели устарели и как их обновлять при необходимости.
 
-A rule tells `make` two things: when the targets are out of date, and how to update them when necessary.
+Критерий устаревания указывается в предварительных требованиях, которые состоят из имен файлов, разделенных пробелами. (Подстановочные знаки и члены архива (см. [Архивы] (#Archives)) здесь также разрешены.) Цель устарела, если она не существует или если она старше любого из предварительных условий (при сравнении времени последней модификации ). Идея состоит в том, что содержимое целевого файла вычисляется на основе информации в предварительных требованиях, поэтому, если какое-либо из предварительных условий изменяется, содержимое существующего целевого файла больше не обязательно является действительным.
 
-The criterion for being out of date is specified in terms of the prerequisites, which consist of file names separated by spaces. (Wildcards and archive members (see [Archives](#Archives)) are allowed here too.) A target is out of date if it does not exist or if it is older than any of the prerequisites (by comparison of last-modification times). The idea is that the contents of the target file are computed based on information in the prerequisites, so if any of the prerequisites changes, the contents of the existing target file are no longer necessarily valid.
-
-How to update is specified by a recipe. This is one or more lines to be executed by the shell (normally ‘sh’), but with some extra features (see [Writing Recipes in Rules](#Recipes)).
+HСпособ обновления указывается в рецепте. Это одна или несколько строк, которые должны выполняться оболочкой (обычно «sh»), но с некоторыми дополнительными функциями (см. [Написание рецептов в правилах](#Recipes)).
 
 * * * * *
 
@@ -2212,19 +2220,21 @@ Next: [Wildcards](#Wildcards), Previous: [Rule Syntax](#Rule-Syntax), Up: [Rules
 
 ### 4.3 Types of Prerequisites
 
-There are actually two different types of prerequisites understood by GNU `make`: normal prerequisites such as described in the previous section, and *order-only* prerequisites. A normal prerequisite makes two statements: first, it imposes an order in which recipes will be invoked: the recipes for all prerequisites of a target will be completed before the recipe for the target is run. Second, it imposes a dependency relationship: if any prerequisite is newer than the target, then the target is considered out-of-date and must be rebuilt.
+> Типы Prerequisites
 
-Normally, this is exactly what you want: if a target’s prerequisite is updated, then the target should also be updated.
+На самом деле GNU `make` понимает два разных типа предварительных условий: обычные предварительные условия, такие как описанные в предыдущем разделе, и предварительные условия *только для порядка*. Обычное предварительное условие состоит из двух утверждений: во-первых, оно устанавливает порядок, в котором рецепты будут вызываться: рецепты для всех предварительных условий цели будут выполнены до того, как рецепт для цели будет запущен. Во-вторых, он устанавливает отношения зависимости: если какое-либо предварительное условие новее, чем цель, то цель считается устаревшей и должна быть перестроена.
 
-Occasionally, however, you have a situation where you want to impose a specific ordering on the rules to be invoked *without* forcing the target to be updated if one of those rules is executed. In that case, you want to define *order-only* prerequisites. Order-only prerequisites can be specified by placing a pipe symbol (`|`) in the prerequisites list: any prerequisites to the left of the pipe symbol are normal; any prerequisites to the right are order-only:
+Обычно это именно то, что вам нужно: если предварительное условие цели обновлено, то цель также должна быть обновлена.
+
+Однако иногда возникает ситуация, когда вы хотите наложить определенный порядок на правила, которые будут вызываться *без* принудительного обновления цели, если выполняется одно из этих правил. В этом случае вы хотите определить предварительные условия *только для заказа*. Предварительные условия только для заказа могут быть указаны путем помещения символа вертикальной черты (`|`) в список предварительных требований: любые предварительные условия слева от символа вертикальной черты являются нормальными; любые предварительные условия справа относятся только к заказу: 
 
 ``` {.example}
 targets : normal-prerequisites | order-only-prerequisites
 ```
 
-The normal prerequisites section may of course be empty. Also, you may still declare multiple lines of prerequisites for the same target: they are appended appropriately (normal prerequisites are appended to the list of normal prerequisites; order-only prerequisites are appended to the list of order-only prerequisites). Note that if you declare the same file to be both a normal and an order-only prerequisite, the normal prerequisite takes precedence (since they have a strict superset of the behavior of an order-only prerequisite).
+Нормальный раздел предварительных условий, конечно, может быть пустым. Кроме того, вы все равно можете объявить несколько строк предварительных условий для одной и той же цели: они добавляются соответствующим образом (обычные предварительные условия добавляются к списку обычных предварительных условий; предварительные условия только для заказа добавляются к списку предварительных условий только для заказа). Обратите внимание, что если вы объявляете один и тот же файл как обычное условие, так и предварительное условие только для заказа, нормальное предварительное условие имеет приоритет (поскольку они имеют строгий надмножество поведения предварительного условия только для заказа).
 
-Consider an example where your targets are to be placed in a separate directory, and that directory might not exist before `make` is run. In this situation, you want the directory to be created before any targets are placed into it but, because the timestamps on directories change whenever a file is added, removed, or renamed, we certainly don’t want to rebuild all the targets whenever the directory’s timestamp changes. One way to manage this is with order-only prerequisites: make the directory an order-only prerequisite on all the targets:
+Рассмотрим пример, в котором ваши цели должны быть помещены в отдельный каталог, и этот каталог может не существовать до запуска make. В этой ситуации вы хотите, чтобы каталог был создан до того, как в него будут помещены какие-либо цели, но, поскольку временные метки в каталогах меняются всякий раз, когда файл добавляется, удаляется или переименовывается, мы, конечно, не хотим перестраивать все цели всякий раз, когда метка времени каталога изменяется. Один из способов справиться с этим - использовать предварительные условия только для заказа: сделать каталог предварительным условием только для заказа для всех целей:
 
 ``` {.example}
 OBJDIR := objdir
@@ -2241,7 +2251,7 @@ $(OBJDIR):
         mkdir $(OBJDIR)
 ```
 
-Now the rule to create the objdir directory will be run, if needed, before any ‘.o’ is built, but no ‘.o’ will be built because the objdir directory timestamp changed.
+Теперь правило для создания каталога `objdir` будет запущено, если необходимо, до создания любого `.o`, но никакое `.o` не будет построено, потому что временная метка каталога objdir изменилась. 
 
 * * * * *
 
@@ -2249,13 +2259,15 @@ Next: [Directory Search](#Directory-Search), Previous: [Prerequisite Types](#Pre
 
 ### 4.4 Using Wildcard Characters in File Names
 
-A single file name can specify many files using *wildcard characters*. The wildcard characters in `make` are ‘\*’, ‘?’ and ‘[…]’, the same as in the Bourne shell. For example, \*.c specifies a list of all the files (in the working directory) whose names end in ‘.c’.
+> Использование подстановочных знаков в именах файлов
 
-The character ‘\~’ at the beginning of a file name also has special significance. If alone, or followed by a slash, it represents your home directory. For example \~/bin expands to /home/you/bin. If the ‘\~’ is followed by a word, the string represents the home directory of the user named by that word. For example \~john/bin expands to /home/john/bin. On systems which don’t have a home directory for each user (such as MS-DOS or MS-Windows), this functionality can be simulated by setting the environment variable HOME.
+Одно имя файла может указывать на множество файлов с использованием *подстановочных знаков*. Подстановочные знаки в `make` - это `\ *`, `?` и `[…]`, такие же, как в оболочке `Bourne`. Например, `\*`. C указывает список всех файлов (в рабочем каталоге), имена которых заканчиваются на `.c`. 
 
-Wildcard expansion is performed by `make` automatically in targets and in prerequisites. In recipes, the shell is responsible for wildcard expansion. In other contexts, wildcard expansion happens only if you request it explicitly with the `wildcard` function.
+Символ `\~` в начале имени файла также имеет особое значение. Если он один или за ним следует косая черта, он представляет ваш домашний каталог. Например, `\~/bin` заменяется на `/home/you/bin`. Если за `\~` следует слово, строка представляет собой домашний каталог пользователя, названного этим словом. Например, `\~john/bin` расширяется до `/home/john/bin`. В системах, в которых нет домашнего каталога для каждого пользователя (например, `MS-DOS` или `MS-Windows`), эту функциональность можно смоделировать, установив переменную среды `HOME`. 
 
-The special significance of a wildcard character can be turned off by preceding it with a backslash. Thus, foo\\\*bar would refer to a specific file whose name consists of ‘foo’, an asterisk, and ‘bar’.
+Расширение подстановочных знаков выполняется командой `make` автоматически в целях и в предварительных требованиях. В рецептах оболочка отвечает за подстановочные знаки. В других контекстах расширение подстановочного знака происходит только в том случае, если вы явно запрашиваете его с помощью функции `wildcard`.
+
+Особое значение подстановочного символа можно отключить, поставив перед ним обратную косую черту. Таким образом, foo\\\*bar будет относиться к определенному файлу, имя которого состоит из `foo`, звездочки и `bar`. 
 
 ||
 |• [Wildcard Examples](#Wildcard-Examples)|  |Several examples.|
