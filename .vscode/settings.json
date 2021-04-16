@@ -12,6 +12,7 @@
 	"stdint.h": "c",
 	"unistd.h": "c",
 	"cstdarg": "c",
-	"cstdio": "c"
+	"cstdio": "c",
+	"cstdlib": "c"
 }
 }
