@@ -1,5 +1,6 @@
 ## [size_t](#size_t)
 ## [NULL](#NULL)
+## [max_align_t](#max_align_t)
 
 ### size_t
 
