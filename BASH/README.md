@@ -27,6 +27,7 @@
 > 24. [chmod](#chmod)
 > 25. [sestatus](#setstatus)
 > 26. [history](#history)
+> 27. [stat](#stat)
 
 ### uname
 
@@ -172,3 +173,12 @@ diego@debian:~$ sudo systemctl start apache2.service
 diego@debian:~$ sudo systemctl stop apache2
 ```
 Чтобы увидеть состояние службы, используйте команду `systemctl status`. В следующем примере мы предварительно снова запускаем apache2, чтобы затем посмотреть на вывод команды `systemctl status`:
+
+### stat
+
+```sh
+stat -fc %s /
+```
+```sh
+getconf PAGESIZE
+```
