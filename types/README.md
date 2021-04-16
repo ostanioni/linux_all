@@ -129,3 +129,44 @@ PTRDIFF_MAX = 9223372036854775807
 p2-p1 = 5
 ```
 
+## `max_align_t`
+ 
+	Defined in header <stddef.h>
+		
+typedef /*implementation-defined*/ `max_align_t`;
+		(since C11)
+		
+
+`max_align_t` is a type whose alignment requirement is at least as strict (as large) as that of every scalar type.
+Notes
+
+Pointers returned by allocation functions such as malloc are suitably aligned for any object, which means they are aligned at least as strictly as `max_align_t`.
+
+`max_align_t` is usually synonymous with the largest scalar type, which is long double on most platforms, and its alignment requirement is either 8 or 16.
+Example
+Run this code
+```c
+#include <stdio.h>
+#include <stddef.h>
+#include <stdalign.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <inttypes.h>
+ 
+int main(void)
+{
+    size_t a = alignof(max_align_t);
+    printf("Alignment of max_align_t is %zu (%#zx)\n", a, a);
+ 
+    void *p = malloc(123);
+    printf("The address obtained from malloc(123) is %#" PRIxPTR"\n",
+            (uintptr_t)p);
+    free(p);
+}
+```
+Possible output:
+```sh
+Alignment of max_align_t is 16 (0x10)
+The address obtained from malloc(123) is 0x1fa67010
+```
+
