@@ -23,7 +23,7 @@ int main()
      * errno is set to indicate the error. *
 	 ***************************************/
 
-	if ( close(fd) != 0 ) // close in <unistd.h>
+	if ( close(fd) != 0 ) // close() in <unistd.h>
 	{
 		perror("Error: ");
 		fprintf(stderr,"syscall open() failed in file \"%s\" "
