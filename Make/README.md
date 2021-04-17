@@ -2280,14 +2280,17 @@ Next: [Wildcard Pitfall](#Wildcard-Pitfall), Previous: [Wildcards](#Wildcards), 
 
 #### 4.4.1 Wildcard Examples
 
-Wildcards can be used in the recipe of a rule, where they are expanded by the shell. For example, here is a rule to delete all the object files:
+> Примеры подстановочных знаков
+
+Подстановочные знаки можно использовать в рецепте правила, где они расширяются оболочкой. Например, вот правило для удаления всех объектных файлов:
 
 ``` {.example}
 clean:
         rm -f *.o
 ```
 
-Wildcards are also useful in the prerequisites of a rule. With the following rule in the makefile, ‘make print’ will print all the ‘.c’ files that have changed since the last time you printed them:
+Подстановочные знаки также полезны в предпосылках правила. Согласно следующему правилу в make-файле, команда `make print` распечатает все файлы `.c`, которые изменились с момента последней печати: 
+
 
 ``` {.example}
 print: *.c
@@ -2295,15 +2298,16 @@ print: *.c
         touch print
 ```
 
-This rule uses print as an empty target file; see [Empty Target Files to Record Events](#Empty-Targets). (The automatic variable ‘\$?’ is used to print only those files that have changed; see [Automatic Variables](#Automatic-Variables).)
+Это правило использует печать как пустой целевой файл; см. [Пустые целевые файлы для записи событий](#Empty-Targets). (Автоматическая переменная `\$?` Используется для печати только тех файлов, которые были изменены; см. [Автоматические переменные](#Automatic-Variables).) 
 
-Wildcard expansion does not happen when you define a variable. Thus, if you write this:
+Когда вы определяете переменную, раскрытие подстановочных знаков не происходит. Таким образом, если вы напишете это:
 
 ``` {.example}
 objects = *.o
 ```
 
-then the value of the variable `objects` is the actual string ‘\*.o’. However, if you use the value of `objects` in a target or prerequisite, wildcard expansion will take place there. If you use the value of `objects` in a recipe, the shell may perform wildcard expansion when the recipe runs. To set `objects` to the expansion, instead use:
+тогда значением переменной `objects` является фактическая строка `\*.o`. Однако, если вы используете значение `objects` в цели или предварительном требовании, там будет иметь место подстановочный знак. Если вы используете значение `objects` в рецепте, оболочка может выполнять подстановочные знаки при запуске рецепта. Чтобы установить `objects` в расширение, используйте вместо этого: 
+
 
 ``` {.example}
 objects := $(wildcard *.o)
@@ -2317,7 +2321,9 @@ Next: [Wildcard Function](#Wildcard-Function), Previous: [Wildcard Examples](#Wi
 
 #### 4.4.2 Pitfalls of Using Wildcards
 
-Now here is an example of a naive way of using wildcard expansion, that does not do what you would intend. Suppose you would like to say that the executable file foo is made from all the object files in the directory, and you write this:
+> Ловушки использования подстановочных знаков 
+
+А теперь пример наивного способа использования подстановочных знаков, который не дает того, что вы намеревались сделать. Предположим, вы хотите сказать, что исполняемый файл `foo` состоит из всех объектных файлов в каталоге, и напишите это:
 
 ``` {.example}
 objects = *.o
@@ -2326,19 +2332,19 @@ foo : $(objects)
         cc -o foo $(CFLAGS) $(objects)
 ```
 
-The value of `objects` is the actual string ‘\*.o’. Wildcard expansion happens in the rule for foo, so that each *existing* ‘.o’ file becomes a prerequisite of foo and will be recompiled if necessary.
+Значением `objects` является фактическая строка `\*.O`. Расширение подстановочных знаков происходит в правиле для `foo`, так что каждый *существующий* файл  `.o` становится необходимым условием для `foo` и при необходимости будет перекомпилирован. 
 
-But what if you delete all the ‘.o’ files? When a wildcard matches no files, it is left as it is, so then foo will depend on the oddly-named file \*.o. Since no such file is likely to exist, `make` will give you an error saying it cannot figure out how to make \*.o. This is not what you want!
+Но что, если вы удалите все файлы `.o` ? Когда подстановочный знак не соответствует ни одному файлу, он остается как есть, поэтому `foo` будет зависеть от файла со странным именем `\*.o` . Поскольку такого файла, скорее всего, не существует, `make` выдаст сообщение об ошибке, в котором говорится, что он не может понять, как создать `\*.o` . Это не то, что вам нужно!
 
-Actually it is possible to obtain the desired result with wildcard expansion, but you need more sophisticated techniques, including the `wildcard` function and string substitution. See [The Function `wildcard`](#Wildcard-Function).
+На самом деле можно получить желаемый результат с помощью подстановочного знака, но вам нужны более сложные методы, включая функцию `подстановочный знак (wildcard)` и подстановку строк. См. [Функция `wildcard`](#Wildcard-Function). 
 
-Microsoft operating systems (MS-DOS and MS-Windows) use backslashes to separate directories in pathnames, like so:
+Операционные системы `Microsoft` (`MS-DOS` и `MS-Windows`) используют обратную косую черту для разделения каталогов в именах путей, например:
 
 ``` {.example}
   c:\foo\bar\baz.c
 ```
 
-This is equivalent to the Unix-style c:/foo/bar/baz.c (the c: part is the so-called drive letter). When `make` runs on these systems, it supports backslashes as well as the Unix-style forward slashes in pathnames. However, this support does *not* include the wildcard expansion, where backslash is a quote character. Therefore, you *must* use Unix-style slashes in these cases.
+Это эквивалентно `c:/foo/bar/baz.c` в стиле `Unix` (часть `c:` - это так называемая буква диска). Когда `make` работает в этих системах, он поддерживает обратную косую черту, а также прямую косую черту в стиле `Unix` в именах путей. Однако эта поддержка *не* включает подстановочные знаки, где обратная косая черта является кавычкой. Следовательно, в этих случаях вы *должны* использовать косую черту в стиле `Unix`. 
 
 * * * * *
 
