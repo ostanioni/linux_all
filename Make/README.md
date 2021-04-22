@@ -2352,13 +2352,13 @@ Previous: [Wildcard Pitfall](#Wildcard-Pitfall), Up: [Wildcards](#Wildcards)   
 
 #### 4.4.3 The Function `wildcard`
 
-Wildcard expansion happens automatically in rules. But wildcard expansion does not normally take place when a variable is set, or inside the arguments of a function. If you want to do wildcard expansion in such places, you need to use the `wildcard` function, like this:
+Расширение подстановочных знаков происходит автоматически в правилах. Но раскрытие подстановочных знаков обычно не происходит, когда переменная установлена или внутри аргументов функции. Если вы хотите использовать подстановочные знаки в таких местах, вам нужно использовать функцию `wildcard`, например: 
 
 ``` {.example}
 $(wildcard pattern…)
 ```
 
-This string, used anywhere in a makefile, is replaced by a space-separated list of names of existing files that match one of the given file name patterns. If no existing file name matches a pattern, then that pattern is omitted from the output of the `wildcard` function. Note that this is different from how unmatched wildcards behave in rules, where they are used verbatim rather than ignored (see [Wildcard Pitfall](#Wildcard-Pitfall)).
+Эта строка, используемая в любом месте make-файла, заменяется разделенным пробелами списком имен существующих файлов, которые соответствуют одному из заданных шаблонов имен файлов. Если существующее имя файла не соответствует шаблону, то этот шаблон не включается в вывод функции `wildcard`. Обратите внимание, что это отличается от того, как несовпадающие подстановочные знаки ведут себя в правилах, где они используются дословно, а не игнорируются (see [Wildcard Pitfall](#Wildcard-Pitfall)).
 
 One use of the `wildcard` function is to get a list of all the C source files in a directory, like this:
 
